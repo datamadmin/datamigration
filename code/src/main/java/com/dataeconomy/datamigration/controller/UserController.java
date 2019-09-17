@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.boraji.tutorial.spring.service.UserService;
 import com.dataeconomy.datamigration.model.User;
+import com.dataeconomy.datamigration.service.UserService;
 
 @RestController
 public class UserController {
@@ -21,7 +21,7 @@ public class UserController {
    @Autowired
    private UserService userService;
 
-   @PostMapping("/saveUser")
+   @PostMapping("/getUsers")
    public ResponseEntity<?> save(@RequestBody User user) {
       long id = userService.save(user);
       return ResponseEntity.ok().body("New user has been saved with ID:" + id);

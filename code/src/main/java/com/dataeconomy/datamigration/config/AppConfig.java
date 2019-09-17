@@ -17,8 +17,8 @@ import static org.hibernate.cfg.Environment.*;
 @Configuration
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
-@ComponentScans(value = { @ComponentScan("com.boraji.tutorial.spring.dao"),
-      @ComponentScan("com.boraji.tutorial.spring.service") })
+@ComponentScans(value = { @ComponentScan("com.dataeconomy.datamigration.dao"),
+      @ComponentScan("com.dataeconomy.datamigration.service") })
 public class AppConfig {
 
    @Autowired
@@ -48,7 +48,7 @@ public class AppConfig {
       props.put(C3P0_MAX_STATEMENTS, env.getProperty("hibernate.c3p0.max_statements"));
 
       factoryBean.setHibernateProperties(props);
-      factoryBean.setPackagesToScan("com.boraji.tutorial.spring.model");
+      factoryBean.setPackagesToScan("com.dataeconomy.datamigration.model");
 
       return factoryBean;
    }

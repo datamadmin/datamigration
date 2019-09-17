@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "com.boraji.tutorial.spring.controller" })
+@ComponentScan(basePackages = { "com.dataeconomy.datamigration.controller" })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 }
