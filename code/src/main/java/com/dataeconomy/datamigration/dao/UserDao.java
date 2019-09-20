@@ -4,16 +4,17 @@ import java.util.List;
 
 import com.dataeconomy.datamigration.model.User;
 
-public interface UserDao {
+public interface UserDao{
 
-   long save(User user);
+	long save(User user);
 
-   User get(long id);
+	User get(long id);
 
-   List<User> list();
+	List<User> list();
 
-   void update(long id, User user);
+	void update(long id, User user);
 
-   void delete(long id);
-
+	void delete(long id);
+	boolean checklogin(String username,String password);
+	User getSelectedUser(String username);
 }

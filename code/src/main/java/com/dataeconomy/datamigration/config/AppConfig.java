@@ -18,7 +18,7 @@ import static org.hibernate.cfg.Environment.*;
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
 @ComponentScans(value = { @ComponentScan("com.dataeconomy.datamigration.dao"),
-      @ComponentScan("com.dataeconomy.datamigration.service") })
+@ComponentScan("com.dataeconomy.datamigration.service") })
 public class AppConfig {
 
    @Autowired

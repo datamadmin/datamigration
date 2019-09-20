@@ -14,8 +14,9 @@ import org.springframework.stereotype.Repository;
 
 import com.dataeconomy.datamigration.model.User;
 
+
 @Repository
-public class UserDaoImp implements UserDao {
+public class UserDaoImp  implements UserDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -57,5 +58,34 @@ public class UserDaoImp implements UserDao {
 		User user = session.byId(User.class).load(id);
 		session.delete(user);
 	}
+	@Override
+	public boolean checklogin(String username,String password)
+	{
+		boolean resultflag= false;
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<User> cq = cb.createQuery(User.class);
+		Root<User> root = cq.from(User.class);
+		cq.select(root);
+		cq.where(cb.and(cb.equal(root.get("userName"),username),cb.equal(root.get("password"), password)));
+		Query<User> query = session.createQuery(cq);
+		if(query.getResultList()!=null && query.getResultList().size()>0)
+			resultflag = true;
+		return resultflag;
+	}
+	@Override
+	public User getSelectedUser(String username)
+	{
+		System.out.println("***username***"+username);
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<User> cq = cb.createQuery(User.class);
+		Root<User> root = cq.from(User.class);
+		cq.select(root);
+		cq.where(cb.equal(root.get("userName"),username));
+		Query<User> query = session.createQuery(cq);
+		return query.getResultList().get(0);
+	}
+
 
 }
