@@ -21,7 +21,7 @@ public class UserController {
    @Autowired
    private UserService userService;
 
-   @PostMapping("/getUsers")
+   @PostMapping("/saveUser")
    public ResponseEntity<?> save(@RequestBody User user) {
       long id = userService.save(user);
       return ResponseEntity.ok().body("New user has been saved with ID:" + id);
