@@ -24,8 +24,8 @@ export class AppService {
         return this.http.get(`${environment.apiUrl}/users/all`);
     }
 
-    getHistoryList() {
-
+    getHistoryMainList() {
+        return this.http.get(`${environment.apiUrl}/history/main/all`);
     }
 
     addUser(userModel: any) {
@@ -37,8 +37,6 @@ export class AppService {
     }
 
     deleteUser(userId: any) {
-        let params = new HttpParams();
-        params = params.append('userId', userId);
-        return this.http.get(`${environment.apiUrl}/users/delete`, { params: params });
+        return this.http.get(`${environment.apiUrl}/users/delete/${userId}`);
     }
 }
