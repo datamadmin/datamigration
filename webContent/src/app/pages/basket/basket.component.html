@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <app-page-title title="Request" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <app-page-title title="Basket" [breadcrumbItems]="breadCrumbItems"></app-page-title>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -18,8 +18,9 @@
                                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                                     <tr>
                                         <td *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <span *ngSwitchCase="'incrementalFlag'">
-                                                <i [ngClass]="rowData[col.field] ? 'fas fa-check' : 'fas fa-times'"></i>
+                                            <span *ngSwitchCase="'inccrementalFlag'">
+                                                <i
+                                                    [ngClass]="rowData[col.field]=='Y' ? 'fas fa-check' : 'fas fa-times'"></i>
                                             </span>
                                             <span *ngSwitchDefault>
                                                 {{rowData[col.field]}}

@@ -15,6 +15,9 @@
                             [columns]="userCols" [value]="userList">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
+                                    <th>
+                                        Sr.No
+                                    </th>
                                     <th *ngFor="let col of columns">
                                         {{col.header}}
                                     </th>
@@ -23,8 +26,11 @@
                                     </th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
                                 <tr>
+                                    <td>
+                                        {{rowIndex +1}}
+                                    </td>
                                     <td *ngFor="let col of columns">
                                         {{rowData[col.field]}}
                                     </td>
@@ -58,17 +64,17 @@
                         <label for="userName">UserName</label>
                     </div>
                     <div class="ui-g-8">
-                        <input type="text" [(ngModel)]="userJson.userName" name="userName" pInputText
+                        <input type="text" [(ngModel)]="userModel.userName" name="userName" pInputText
                             class="form-control" placeholder="Please Enter Username">
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-4">
-                        <label for="email">Email</label>
+                        <label for="emailid">Email</label>
                     </div>
                     <div class="ui-g-8">
-                        <input type="email" name="email" pInputText [(ngModel)]="userJson.email" class="form-control"
-                            placeholder="Please Enter Email">
+                        <input type="email" name="emailid" pInputText [(ngModel)]="userModel.emailid"
+                            class="form-control" placeholder="Please Enter Email">
                     </div>
                 </div>
 
@@ -77,10 +83,11 @@
                         <label for="userRole">User Role</label>
                     </div>
                     <div class="ui-g-8">
-                        <p-radioButton class="mr-2" name="userRole" value="true" label="Admin"
-                            [(ngModel)]="userJson.isAdmin">
+                        <p-radioButton class="mr-2" name="userRole" value="Admin" label="Admin"
+                            [(ngModel)]="userModel.userRole">
                         </p-radioButton>
-                        <p-radioButton name="userRole" value="false" label="Normal User" [(ngModel)]="userJson.isAdmin">
+                        <p-radioButton name="userRole" value="Normal User" label="Normal User"
+                            [(ngModel)]="userModel.userRole">
                         </p-radioButton>
                     </div>
                 </div>
@@ -89,8 +96,9 @@
         </div>
     </div>
     <p-footer>
-        <button type="button" class="mr-2" pButton icon="fas fa-check" (click)="isAdd=false" label="Save"></button>
-        <button type="button" pButton icon="fas fa-times" (click)="isAdd=false" label="Cancel"
+        <button type="button" class="mr-2" pButton icon="fas fa-check" (click)="addUserClickFunction()"
+            label="Save"></button>
+        <button type="button" pButton icon="fas fa-times" (click)="cancelClickFunction()" label="Cancel"
             class="ui-button-secondary"></button>
     </p-footer>
 </p-dialog>
@@ -108,16 +116,16 @@
                         <label for="userName">UserName</label>
                     </div>
                     <div class="ui-g-8">
-                        {{userJson.userName}}
+                        {{userModel.userName}}
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-4">
-                        <label for="email">Email</label>
+                        <label for="emailid">Email</label>
                     </div>
                     <div class="ui-g-8">
-                        <input pInputText [(ngModel)]="userJson.email" type="email" name="email" class="form-control"
-                            placeholder="Please Enter Email">
+                        <input pInputText [(ngModel)]="userModel.emailid" type="email" name="emailid"
+                            class="form-control" placeholder="Please Enter Email">
                     </div>
                 </div>
 
@@ -126,10 +134,11 @@
                         <label for="example-password">User Role</label>
                     </div>
                     <div class="ui-g-8">
-                        <p-radioButton class="mr-2" name="group1" value="true" label="Admin"
-                            [(ngModel)]="userJson.isAdmin">
+                        <p-radioButton class="mr-2" name="userRole" value="Admin" label="Admin"
+                            [(ngModel)]="userModel.userRole">
                         </p-radioButton>
-                        <p-radioButton name="group1" value="false" label="Normal User" [(ngModel)]="userJson.isAdmin">
+                        <p-radioButton name="userRole" value="Normal User" label="Normal User"
+                            [(ngModel)]="userModel.userRole">
                         </p-radioButton>
                     </div>
                 </div>
@@ -138,8 +147,9 @@
         </div>
     </div>
     <p-footer>
-        <button type="button" class="mr-2" pButton icon="fas fa-check" (click)="isUpdate=false" label="Save"></button>
-        <button type="button" pButton icon="fas fa-times" (click)="isUpdate=false" label="Cancel"
+        <button type="button" class="mr-2" pButton icon="fas fa-check" (click)="updateUserClickFunction()"
+            label="Save"></button>
+        <button type="button" pButton icon="fas fa-times" (click)="cancelClickFunction()" label="Cancel"
             class="ui-button-secondary"></button>
     </p-footer>
 </p-dialog>

@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
+import { AppService } from 'src/app/core/services/app.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
+
+enum USER_ACTION_TYPE {
+    CREATE,
+    UPDATE
+}
 
 @Component({
     selector: 'app-user',
@@ -18,83 +25,57 @@ export class UserComponent implements OnInit {
     isAdd: boolean = false;
     isUpdate: boolean = false;
 
-    userJson: any = {
-        userId: null,
+    userModel: any = {
+        id: null,
         userName: "",
-        email: "",
-        isAdmin: "true"
+        emailid: "",
+        userRole: ""
     };
 
-    constructor(private confirmationService: ConfirmationService) { }
+    constructor(
+        private confirmationService: ConfirmationService,
+        private appService: AppService,
+        private notificationService: NotificationService
+    ) { }
 
     ngOnInit() {
 
         this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'Settings', active: true }, { label: 'Users', active: true }];
 
         this.userCols = [
-            { field: 'userId', header: 'Sr.No' },
             { field: 'userName', header: 'User Name' },
             { field: 'userRole', header: 'User Role' },
-            { field: 'email', header: 'User Email' }
+            { field: 'emailid', header: 'User Email' }
         ];
         this.fetchUserData();
     }
 
     fetchUserData() {
-        this.userList = [
-            {
-                userId: '1',
-                userName: 'User1',
-                email: 'admin@dataeconomics.com',
-                userRole: "Admin",
-                isAdmin: "true"
+        this.appService.getAllUsers().subscribe(
+            data => {
+                this.userList = data;
             },
-            {
-                userId: '2',
-                userName: 'User2',
-                email: 'admin@dataeconomics.com',
-                userRole: "Admin",
-                isAdmin: "true"
-            },
-            {
-                userId: '3',
-                userName: 'User3',
-                email: 'admin@dataeconomics.com',
-                userRole: "Admin",
-                isAdmin: "true"
-            },
-            {
-                userId: '4',
-                userName: 'User4',
-                email: 'admin@dataeconomics.com',
-                userRole: "Normal User",
-                isAdmin: "false"
-            },
-            {
-                userId: '5',
-                userName: 'User5',
-                email: 'admin@dataeconomics.com',
-                userRole: "Admin",
-                isAdmin: "true"
-            }];
+            error => {
+                console.log(error);
+            });
     }
 
-    resetUserJson() {
-        this.userJson = {
-            userId: null,
+    resetUserModel() {
+        this.userModel = {
+            id: null,
             userName: "",
-            email: "",
-            isAdmin: "true"
+            emailid: "",
+            userRole: ""
         };
     }
 
     showAddUser() {
-        this.userJson =
-            this.isAdd = true;
+        this.resetUserModel();
+        this.isAdd = true;
     };
 
     showUpdateUser(selectedUser: any) {
-        this.userJson = selectedUser;
+        this.userModel = Object.assign({}, selectedUser);
         this.isUpdate = true;
     };
 
@@ -102,8 +83,74 @@ export class UserComponent implements OnInit {
         this.confirmationService.confirm({
             message: 'Are you sure want to delete the user?',
             accept: () => {
-                //Actual logic to perform a confirmation
+                this.deleteUserFunction(selectedUser);
             }
         });
     };
+
+    cancelClickFunction() {
+        this.isAdd = false;
+        this.isUpdate = false;
+        this.resetUserModel();
+    }
+
+    deleteUserFunction(selectedUser: any) {
+        this.appService.deleteUser(selectedUser.id).subscribe(
+            (res) => {
+                this.notificationService.showSuccess("User deleted successfully");
+                this.fetchUserData();
+            },
+            (error) => {
+                console.log(error);
+                this.notificationService.showError(error.message || "Error while deleting user");
+            });
+    }
+
+    validateUserModel(action: USER_ACTION_TYPE) {
+        if (action == USER_ACTION_TYPE.CREATE) {
+            if (this.userModel.userName.trim().length < 1) {
+                this.notificationService.showError('Please enter username');
+                return false;
+            }
+            else if (this.userModel.emailid.trim().length < 1) {
+                this.notificationService.showError('Please enter email');
+                return false;
+            }
+            return true;
+        }
+        else if (action == USER_ACTION_TYPE.UPDATE) {
+            return true;
+        }
+    };
+
+    addUserClickFunction() {
+        if (this.validateUserModel(USER_ACTION_TYPE.CREATE)) {
+            this.isAdd = false;
+            this.appService.addUser(this.userModel).subscribe(
+                (res) => {
+                    this.notificationService.showSuccess("User created successfully");
+                    this.fetchUserData();
+                },
+                (error) => {
+                    this.isAdd = true;
+                    this.notificationService.showError("Error while creating user");
+                });
+        }
+
+    }
+
+    updateUserClickFunction() {
+        if (this.validateUserModel(USER_ACTION_TYPE.UPDATE)) {
+            this.isUpdate = false;
+            this.appService.updateUser(this.userModel).subscribe(
+                (res) => {
+                    this.notificationService.showSuccess("User information updated successfully");
+                    this.fetchUserData();
+                },
+                (error) => {
+                    this.isUpdate = true;
+                    this.notificationService.showError("Error while updating user information");
+                });
+        }
+    }
 }

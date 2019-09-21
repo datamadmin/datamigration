@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppService } from 'src/app/core/services/app.service';
 
 @Component({
     selector: 'app-basket',
@@ -15,7 +16,10 @@ export class BasketComponent implements OnInit {
     tableCols: any[];
     tableData: any = [];
 
-    constructor(private router: Router) { }
+    constructor(
+        private router: Router,
+        private appService: AppService
+    ) { }
 
     ngOnInit() {
         // tslint:disable-next-line: max-line-length
@@ -25,15 +29,14 @@ export class BasketComponent implements OnInit {
          * fetch data
          */
         this._fetchData();
-
         this.tableCols = [
-            { field: 'sno', header: 'Sr.No' },
-            { field: 'dbName', header: 'DB Name' },
+            { field: 'srNo', header: 'Sr.No' },
+            { field: 'schemaName', header: 'DB Name' },
             { field: 'tableName', header: 'Table Name' },
             { field: 'filterCondition', header: 'Filter Condition' },
-            { field: 'targetBucketName', header: 'Target Bucket Name' },
-            { field: 'incrementalFlag', header: 'Incremental Flag' },
-            { field: 'incrementalColumn', header: 'Incremental Column' }
+            { field: 'targetS3Bucket', header: 'Target Bucket Name' },
+            { field: 'inccrementalFlag', header: 'Incremental Flag' },
+            { field: 'incrementalClmn', header: 'Incremental Column' }
         ];
     }
 
@@ -41,33 +44,14 @@ export class BasketComponent implements OnInit {
      * fetches the table value
      */
     _fetchData() {
-        this.tableData = [{
-            sno: '1',
-            dbName: 'DB1',
-            tableName: "Table1",
-            filterCondition: 'Sample Condition',
-            targetBucketName: 'Bucket1',
-            incrementalFlag: false,
-            incrementalColumn: "Col1"
-        },
-        {
-            sno: '2',
-            dbName: 'DB1',
-            tableName: "Table2",
-            filterCondition: 'Sample Condition',
-            targetBucketName: 'Bucket1',
-            incrementalFlag: false,
-            incrementalColumn: "Col1"
-        },
-        {
-            sno: '3',
-            dbName: 'DB1',
-            tableName: "Table3",
-            filterCondition: 'Sample Condition',
-            targetBucketName: 'Bucket1',
-            incrementalFlag: false,
-            incrementalColumn: "Col1"
-        }]
+
+        this.appService.getAllBasketItems().subscribe(
+            data => {
+                this.tableData = data;
+            },
+            error => {
+                console.log(error);
+            });
     }
 
     onCancelFunction() {

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Table } from 'primeng/table';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-recon',
@@ -24,7 +26,15 @@ export class ReconComponent implements OnInit {
 
   selectedRec: any;
 
-  constructor() {
+  filterParams: any = {};
+
+  @ViewChild("masterTable", { static: false }) masterTable: Table;
+
+  constructor(private route: ActivatedRoute) {
+  }
+
+  ngAfterViewInit() {
+    this.masterTable.filter(this.filterParams.status, "status", 'startsWith');
   }
 
   ngOnInit() {
@@ -53,6 +63,17 @@ export class ReconComponent implements OnInit {
       { field: 'targetCount', header: 'Target Account' },
       { field: 'status', header: 'Status' }
     ];
+
+
+    for (const key in this.masterCols) {
+      this.filterParams[key] = "";
+    }
+
+    this.route.queryParams
+      .filter(params => params.status)
+      .subscribe(params => {
+        this.filterParams.status = params["status"] || "";
+      });
   }
 
   /**
@@ -80,7 +101,7 @@ export class ReconComponent implements OnInit {
           tableName: 'Sales',
           sourceCount: 40,
           targetCount: 0,
-          status: 'In Process'
+          status: 'In Progress'
         },
         {
           sno: '3',
@@ -96,7 +117,7 @@ export class ReconComponent implements OnInit {
         requestedBy: 'John Doe',
         startTime: '12/08/2019 16:00 EST',
         completedTime: '12/08/2019 16:10 EST',
-        status: 'In Process',
+        status: 'In Progress',
         details: [{
           sno: '1',
           dbName: 'AWSCloud',
@@ -111,7 +132,7 @@ export class ReconComponent implements OnInit {
           tableName: 'Sales',
           sourceCount: 40,
           targetCount: 0,
-          status: 'In Process'
+          status: 'In Progress'
         },
         {
           sno: '3',
@@ -142,7 +163,7 @@ export class ReconComponent implements OnInit {
           tableName: 'Sales',
           sourceCount: 40,
           targetCount: 0,
-          status: 'In Process'
+          status: 'In Progress'
         },
         {
           sno: '3',

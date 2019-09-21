@@ -14,11 +14,40 @@
     text-decoration: underline !important;
 }
 
+.ng-busy {
+    z-index: 1200;
+}
+
+.ng-busy-backdrop {
+    background: #a7adba !important;
+    position: fixed;
+    z-index: 1200;
+}
+
+.ng-busy-default-wrapper {
+    top: 45% !important;
+    position: fixed !important;
+}
+
+
 body {
 
     // .btn {
     //     padding: 0.5em 3em;
     // }
+
+    .ui-toast-icon {
+        color: #fff !important;
+    }
+
+    .ui-toast .ui-toast-message.ui-toast-message-error {
+        background-color: #d9534f;
+        color: #fff;
+
+        .ui-toast-close-icon {
+            color: #fff;
+        }
+    }
 
     .ui-widget {
         font-family: Nunito, sans-serif;
@@ -104,6 +133,7 @@ body {
         #topnav {
 
             background: #0f90d4;
+            z-index: 1000;
 
             .navigation-menu {
                 text-align: center;

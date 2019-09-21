@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit {
     }
     else if (requestType == 'recon') {
       let status = this.chartData[0]["reconStatus"]["labels"][config.dataPointIndex]
-      this.router.navigate(['/app/recon']);
+      this.router.navigate(['/app/recon'], { queryParams: { status: status } });
     }
   }
 

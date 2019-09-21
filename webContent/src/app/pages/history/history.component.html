@@ -18,6 +18,7 @@
                                     <tr>
                                         <th *ngFor="let col of columns" [ngSwitch]="col.field">
                                             <input *ngSwitchDefault pInputText type="text"
+                                                [(ngModel)]="filterParams[col.field]"
                                                 (input)="masterTable.filter($event.target.value, col.field, col.filterMatchMode)">
                                         </th>
                                     </tr>
@@ -35,7 +36,7 @@
                                             <span *ngSwitchCase="'status'">
                                                 <span *ngIf="rowData.status=='Completed'"
                                                     class="badge badge-success">Completed</span>
-                                                <span *ngIf="rowData.status=='In Process'" class="badge badge-info">In
+                                                <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In
                                                     Process</span>
                                                 <span *ngIf="rowData.status=='Error'"
                                                     class="badge badge-danger">Error</span>
@@ -86,7 +87,7 @@
                                             <span *ngSwitchCase="'requestStatus'">
                                                 <span *ngIf="rowData.requestStatus=='Completed'"
                                                     class="badge badge-success">Completed</span>
-                                                <span *ngIf="rowData.requestStatus=='In Process'"
+                                                <span *ngIf="rowData.requestStatus=='In Progress'"
                                                     class="badge badge-info">In
                                                     Process</span>
                                                 <span *ngIf="rowData.requestStatus=='Error'"

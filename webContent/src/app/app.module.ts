@@ -5,8 +5,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
-import { FakeBackendProvider } from './core/helpers/fake-backend';
-
 import { LayoutsModule } from './layouts/layouts.module';
 import { UIModule } from './shared/ui/ui.module';
 
@@ -24,6 +22,15 @@ import {
   NgbToastModule,
   NgbPopoverModule
 } from '@ng-bootstrap/ng-bootstrap';
+
+import { BusyModule } from 'angular2-busy';
+
+import { AppService } from './core/services/app.service';
+import { LoaderInterceptor } from './core/helpers/loader.interceptor';
+import { LoaderService } from './core/services/loader.service';
+import { NotificationService } from './core/services/notification.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -44,14 +51,18 @@ import {
     NgbProgressbarModule,
     NgbAlertModule,
     NgbToastModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    BusyModule,
+    ToastModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
-    // provider used to create fake backend
-    FakeBackendProvider
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }, ,
+    LoaderService,
+    NotificationService,
+    MessageService,
+    AppService
   ],
   bootstrap: [AppComponent]
 })

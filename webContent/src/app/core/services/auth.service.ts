@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 
 import { CookieService } from '../services/cookie.service';
-import { User } from '../models/auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    user: User;
+    user: any;
 
     constructor(private http: HttpClient, private cookieService: CookieService) {
     }
@@ -15,11 +13,16 @@ export class AuthenticationService {
     /**
      * Returns the current user
      */
-    public currentUser(): User {
+    public currentUser(): any {
         if (!this.user) {
             this.user = JSON.parse(this.cookieService.getCookie('currentUser'));
         }
         return this.user;
+    }
+
+    setUser(user: any) {
+        this.user = user;
+        this.cookieService.setCookie('currentUser', JSON.stringify(user), 1);
     }
 
     /**
@@ -28,16 +31,7 @@ export class AuthenticationService {
      * @param password password of user
      */
     login(email: string, password: string) {
-        return this.http.post<any>(`/api/login`, { email, password })
-            .pipe(map(user => {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-                    this.user = user;
-                    // store user details and jwt in cookie
-                    this.cookieService.setCookie('currentUser', JSON.stringify(user), 1);
-                }
-                return user;
-            }));
+        return this.http.post<any>(`/api/login`, { email, password });
     }
 
     /**

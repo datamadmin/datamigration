@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import { Table } from 'primeng/table';
@@ -10,7 +10,7 @@ import { Table } from 'primeng/table';
     providers: []
 })
 
-export class HistoryComponent implements OnInit {
+export class HistoryComponent implements OnInit, AfterViewInit {
     // bread crum data
     breadCrumbItems: Array<{}>;
 
@@ -24,18 +24,14 @@ export class HistoryComponent implements OnInit {
 
     selectedRec: any;
 
-    filterParams: any = {
-        "status": ""
-    };
+    filterParams: any = {};
 
     @ViewChild("masterTable", { static: false }) masterTable: Table;
 
-    constructor(private route: ActivatedRoute) {
-        this.route.queryParams
-            .filter(params => params.status)
-            .subscribe(params => {
-                this.filterParams.status = params["status"] || "";
-            });
+    constructor(private route: ActivatedRoute) { }
+
+    ngAfterViewInit() {
+        this.masterTable.filter(this.filterParams.status, "status", 'startsWith');
     }
 
     ngOnInit() {
@@ -68,6 +64,17 @@ export class HistoryComponent implements OnInit {
             { field: 'incrementalColumn', header: 'Incremental Column' },
             { field: 'requestStatus', header: 'Request Status' }
         ];
+
+        for (const key in this.masterCols) {
+            this.filterParams[key] = "";
+        }
+
+        this.route.queryParams
+            .filter(params => params.status)
+            .subscribe(params => {
+                this.filterParams.status = params["status"] || "";
+            });
+
     }
 
     /**
@@ -102,7 +109,7 @@ export class HistoryComponent implements OnInit {
                     targetBucketName: 'Bucket1',
                     incrementalFlag: true,
                     incrementalColumn: false,
-                    requestStatus: 'In Process'
+                    requestStatus: 'In Progress'
                 },
                 {
                     sno: '3',
@@ -120,7 +127,7 @@ export class HistoryComponent implements OnInit {
                 requestedBy: 'John Doe',
                 requestedTime: '12/08/2019 16:00 EST',
                 tokenizationFlag: true,
-                status: 'In Process',
+                status: 'In Progress',
                 requestType: 'HDFS to S3',
                 scriptGenCompletedTime: '12/08/2019 16:10 EST',
                 executionCompletedTime: '10 Min',
@@ -142,7 +149,7 @@ export class HistoryComponent implements OnInit {
                     targetBucketName: 'Bucket1',
                     incrementalFlag: true,
                     incrementalColumn: false,
-                    requestStatus: 'In Process'
+                    requestStatus: 'In Progress'
                 },
                 {
                     sno: '3',
@@ -182,7 +189,7 @@ export class HistoryComponent implements OnInit {
                     targetBucketName: 'Bucket1',
                     incrementalFlag: true,
                     incrementalColumn: false,
-                    requestStatus: 'In Process'
+                    requestStatus: 'In Progress'
                 },
                 {
                     sno: '3',
@@ -196,8 +203,6 @@ export class HistoryComponent implements OnInit {
                 }]
             }
         ];
-
-        // this.masterTable.filter(this.filterParams.status, "status", 'startsWith');
     }
 
     downloadTokenizationDetails() {
