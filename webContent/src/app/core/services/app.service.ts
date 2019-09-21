@@ -37,6 +37,6 @@ export class AppService {
     }
 
     deleteUser(userId: any) {
-        return this.http.get(`${environment.apiUrl}/users/delete/${userId}`);
+        return this.http.delete(`${environment.apiUrl}/users/delete/${userId}`);
     }
 }
