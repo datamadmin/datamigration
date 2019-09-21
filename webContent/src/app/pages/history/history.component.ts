@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/filter';
+import { Table } from 'primeng/table';
 
 @Component({
     selector: 'app-history',
@@ -23,11 +24,17 @@ export class HistoryComponent implements OnInit {
 
     selectedRec: any;
 
+    filterParams: any = {
+        "status": ""
+    };
+
+    @ViewChild("masterTable", { static: false }) masterTable: Table;
+
     constructor(private route: ActivatedRoute) {
         this.route.queryParams
             .filter(params => params.status)
             .subscribe(params => {
-                console.log(params);
+                this.filterParams.status = params["status"] || "";
             });
     }
 
@@ -44,6 +51,7 @@ export class HistoryComponent implements OnInit {
             { field: 'requestNo', header: 'Request No' },
             { field: 'requestedBy', header: 'Requested By' },
             { field: 'requestedTime', header: 'Requested Time' },
+            { field: 'tokenizationFlag', header: 'Tokenization Enabled' },
             { field: 'status', header: 'Recon Status' },
             { field: 'requestType', header: 'Request Type' },
             { field: 'scriptGenCompletedTime', header: 'Script Generation Completed Time' },
@@ -71,6 +79,7 @@ export class HistoryComponent implements OnInit {
                 requestNo: '1000',
                 requestedBy: 'John Doe',
                 requestedTime: '12/08/2019 16:00 EST',
+                tokenizationFlag: true,
                 status: 'Completed',
                 requestType: 'HDFS to S3',
                 scriptGenCompletedTime: '12/08/2019 16:10 EST',
@@ -110,6 +119,7 @@ export class HistoryComponent implements OnInit {
                 requestNo: '1001',
                 requestedBy: 'John Doe',
                 requestedTime: '12/08/2019 16:00 EST',
+                tokenizationFlag: true,
                 status: 'In Process',
                 requestType: 'HDFS to S3',
                 scriptGenCompletedTime: '12/08/2019 16:10 EST',
@@ -149,6 +159,7 @@ export class HistoryComponent implements OnInit {
                 requestNo: '1002',
                 requestedBy: 'John Doe',
                 requestedTime: '12/08/2019 16:00 EST',
+                tokenizationFlag: true,
                 status: 'Error',
                 requestType: 'HDFS to S3',
                 scriptGenCompletedTime: '12/08/2019 16:10 EST',
@@ -183,10 +194,15 @@ export class HistoryComponent implements OnInit {
                     incrementalColumn: false,
                     requestStatus: 'Error'
                 }]
-            },
+            }
         ];
+
+        // this.masterTable.filter(this.filterParams.status, "status", 'startsWith');
     }
 
+    downloadTokenizationDetails() {
+
+    }
 
     openReconDetails(selectedItem: any) {
         this.selectedRec = selectedItem;
@@ -198,5 +214,17 @@ export class HistoryComponent implements OnInit {
         this.selectedRec = null;
         this.showMaster = true;
         this.showDetail = false;
+    }
+
+    onDetailsSubmitFunction() {
+
+    }
+
+    onSubmitFunction() {
+
+    }
+
+    onCancelFunction() {
+
     }
 }

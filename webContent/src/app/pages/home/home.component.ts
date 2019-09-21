@@ -129,9 +129,11 @@ export class HomeComponent implements OnInit {
   contentClicked(requestType, event, chartContext, config) {
     console.log(config);
     if (requestType == 'request') {
-      this.router.navigate(['/app/history'], { queryParams: { status: '' } });
+      let status = this.chartData[0]["requestStatus"]["labels"][config.dataPointIndex]
+      this.router.navigate(['/app/history'], { queryParams: { status: status } });
     }
     else if (requestType == 'recon') {
+      let status = this.chartData[0]["reconStatus"]["labels"][config.dataPointIndex]
       this.router.navigate(['/app/recon']);
     }
   }

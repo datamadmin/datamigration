@@ -5,16 +5,20 @@
 
 .link {
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: underline !important;
 }
 
 .link:hover,
 .link:focus {
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: underline !important;
 }
 
 body {
+
+    // .btn {
+    //     padding: 0.5em 3em;
+    // }
 
     .ui-widget {
         font-family: Nunito, sans-serif;
@@ -27,6 +31,7 @@ body {
         vertical-align: top;
         border: none;
         border-top: 1px solid #f5f6f8;
+        text-align: center;
     }
 
     .ui-table .ui-paginator-bottom {
@@ -40,6 +45,47 @@ body {
 
     .ui-radiobutton-label {
         vertical-align: middle;
+    }
+
+    .ui-table .ui-widget-header {
+        border: 0;
+    }
+
+    .ui-table .ui-inputtext {
+        width: 100%;
+    }
+
+    .ui-tabview.ui-tabview-top {
+        border: 0 none;
+
+        .ui-tabview-nav {
+            padding: 0;
+            border: 0;
+            background: #ffffff;
+            border-radius: 0;
+
+            li {
+                outline: 0;
+
+                &.ui-state-active {
+                    background-color: #ffffff;
+                    color: #63aee2;
+                    border-bottom: 4px solid #63aee2;
+
+                    a {
+                        color: #63aee2;
+                    }
+                }
+
+                &:not(.ui-state-active):not(.ui-state-disabled):hover {
+                    background-color: #ffffff;
+                }
+
+                a {
+                    padding: 1em 2em;
+                }
+            }
+        }
     }
 
     &.authentication-bg-pattern {

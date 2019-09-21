@@ -39,8 +39,12 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { TabViewModule } from 'primeng/tabview';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
 import { CookieService } from '../core/services/cookie.service';
 import { RequestPreviewComponent } from './request-preview/request-preview.component';
+import { BasketComponent } from './basket/basket.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +55,9 @@ import { RequestPreviewComponent } from './request-preview/request-preview.compo
     HelpComponent,
     UserComponent,
     ConnectionComponent,
-    RequestPreviewComponent
+    RequestPreviewComponent,
+    BasketComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,
@@ -75,9 +81,11 @@ import { RequestPreviewComponent } from './request-preview/request-preview.compo
     InputTextModule,
     CheckboxModule,
     RadioButtonModule,
+    ButtonModule,
     TabViewModule,
     DropdownModule,
-    FileUploadModule
+    FileUploadModule,
+    InputTextareaModule
   ],
   providers: [
     ConfirmationService,

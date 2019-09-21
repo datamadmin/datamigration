@@ -2,39 +2,38 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-request-preview',
-    templateUrl: './request-preview.component.html',
-    styleUrls: ['./request-preview.component.scss'],
+    selector: 'app-basket',
+    templateUrl: './basket.component.html',
+    styleUrls: ['./basket.component.scss'],
     providers: []
 })
 
-export class RequestPreviewComponent implements OnInit {
+export class BasketComponent implements OnInit {
     // bread crum data
     breadCrumbItems: Array<{}>;
 
-    previewCols: any[];
-    previewList: any = [];
-    selectedRequestList: any = [];
+    tableCols: any[];
+    tableData: any = [];
 
     constructor(private router: Router) { }
 
     ngOnInit() {
         // tslint:disable-next-line: max-line-length
-        this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'Request', path: '/app/request' }, { label: 'Preview', active: true }];
+        this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'Basket', active: true }];
 
         /**
          * fetch data
          */
         this._fetchData();
 
-        this.previewCols = [
-            { field: 'sno', header: 'Sr.No', width: '100px' },
-            { field: 'dbName', header: 'DB Name', width: '180px' },
-            { field: 'tableName', header: 'Table Name', width: '180px' },
-            { field: 'filterCondition', header: 'Filter Condition', width: '180px' },
-            { field: 'targetBucketName', header: 'Target Bucket Name', width: '100px' },
-            { field: 'incrementalFlag', header: 'Incremental Flag', width: '100px' },
-            { field: 'incrementalColumn', header: 'Incremental Column', width: '100px' }
+        this.tableCols = [
+            { field: 'sno', header: 'Sr.No' },
+            { field: 'dbName', header: 'DB Name' },
+            { field: 'tableName', header: 'Table Name' },
+            { field: 'filterCondition', header: 'Filter Condition' },
+            { field: 'targetBucketName', header: 'Target Bucket Name' },
+            { field: 'incrementalFlag', header: 'Incremental Flag' },
+            { field: 'incrementalColumn', header: 'Incremental Column' }
         ];
     }
 
@@ -42,7 +41,7 @@ export class RequestPreviewComponent implements OnInit {
      * fetches the table value
      */
     _fetchData() {
-        this.previewList = [{
+        this.tableData = [{
             sno: '1',
             dbName: 'DB1',
             tableName: "Table1",
@@ -76,6 +75,6 @@ export class RequestPreviewComponent implements OnInit {
     }
 
     onContinueFunction() {
-        this.router.navigate(['/app/basket']);
+        this.router.navigate(['/app/history']);
     }
 }
