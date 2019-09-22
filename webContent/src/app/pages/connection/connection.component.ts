@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { AppService } from 'src/app/core/services/app.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
+
+enum CONNECTION_GROUP {
+    AWS_TO_S3 = "AWS_TO_S3",
+    HDFS = "HDFS",
+    TARGET_FILE_PROPS = "TARGET_FILE_PROPS",
+    OTHER_PROPS = "OTHER_PROPS"
+}
 
 @Component({
     selector: 'app-connection',
@@ -11,90 +20,64 @@ export class ConnectionComponent implements OnInit {
 
     breadCrumbItems: Array<{}>;
 
-    constructor() { }
+    constructor(
+        private appService: AppService,
+        private notificationService: NotificationService
+    ) { }
 
-    private connectionModel: any = {
-        "aswtoS3": {
-            "connectionType": null,
-            "longTermCredentials": {
-                "accessID": "",
-                "secretKey": ""
-            },
-            "shortTermCredentials": {
-                "accessID": "",
-                "secretKey": "",
-                "roleARN": "",
-                "principleARN": "",
-                "samlProviderARN": "",
-                "roleSessionName": "",
-                "policyARNNumbers": "",
-                "externalID": "",
-                "federatedUserName": "",
-                "inlineSessionPolicy": "",
-                "duration": "",
-                "ldapUserName": "",
-                "ldapPassword": "",
-                "ldapDomain": ""
-            }
+
+    private connectionModel = {
+        "connectionType": "",
+        "awsAccessIdLc": "",
+        "awsSecretKeyLc": "",
+        "awsAccessIdSc": "",
+        "awsSecretKeySc": "",
+        "roleArn": "",
+        "principalArn": "",
+        "samlProviderArn": "",
+        "roleSesnName": "",
+        "policyArnMembers": "",
+        "externalId": "",
+        "fdrtdUserName": "",
+        "inlineSesnPolicy": "",
+        "duration": "",
+        "ldapUserName": "",
+        "ldapUserPassw": "",
+        "ldapDomain": "",
+        "scCrdntlAccessType": "",
+        "isHiveConnEnabled": false,
+        "isImpalaConnEnabled": false,
+        "isSparkConnEnabled": false,
+        "hiveHostName": "",
+        "hivePortNmbr": "",
+        "impalaHostName": "",
+        "impalaPortNmbr": "",
+        "sqlWhDir": "",
+        "hiveMsUri": "",
+        "authenticationType": "",
+        "credentialStrgType": "",
+        "hdfsLdapUserName": "",
+        "hdfsLdapUserPassw": "",
+        "hdfsLdapDomain": "",
+        "kerberosHostRealm": "",
+        "kerberosHostFqdn": "",
+        "kerberosServiceName": "",
+        "sslKeystorePath": "",
+        "tgtFormatPropDto": {
+            "formatType": "",
+            "compressionType": "",
+            "fieldDelimiter": ""
         },
-        "hdfs": {
-            "connectionType": null,
-            "hiveDirectConnection": {
-                "isSelected": false,
-                "hostName": "",
-                "portName": ""
-            },
-            "hiveUsingImpalaConnection": {
-                "isSelected": false,
-                "hostName": "",
-                "portName": ""
-            },
-            "sparkOnHiveConnection": {
-                "isSelected": false,
-                "sqlWarehouseDir": "",
-                "hiveMetastoreURI": ""
-            },
-            "authentication": {
-                "authenticationType": "",
-                "securedConnection": {
-                    "connectionType": "",
-                    "ldapConnection": {
-                        "userName": "",
-                        "password": "",
-                        "domain": ""
-                    },
-                    "kerberosConnection": {
-                        "hostRealm": "",
-                        "hostFQDN": "",
-                        "serviceName": "",
-                        "sslKeyStorePath": ""
-                    }
-                }
-            }
-        },
-        "targetFileProps": {
-            "targetFormat": "",
-            "targetCompression": "",
-            "textFormat": {
-                "fieldDelimiter": ""
-            }
-        },
-        "otherProps": {
-            "tokenization": {
-                "tokenizationFlag": "",
-                "protegrityDirectoryPath": ""
-            },
-            "parallelism": {
-                "noOfParallelCopyJobs": "",
-                "noOfParallelUserRequests": ""
-            },
-            "hdfs": {
-                "tempHiveDatabase": "",
-                "tempHDFSDir": "",
-                "hdfsEdgeNode": "",
-                "hdfsUserName": "",
-                "hdfsUserPEMFileLocation": ""
-            }
+        "tgtOtherPropDto": {
+            "parallelJobs": "",
+            "parallelUsrRqst": "",
+            "tempHiveDB": "",
+            "tempHdfsDir": "",
+            "hdfcEdgeNode": "",
+            "hdfsUserName": "",
+            "hdfsPemLocation": "",
+            "tokenizationInd": "",
+            "ptgyDirPath": ""
         }
     }
 
@@ -106,8 +89,19 @@ export class ConnectionComponent implements OnInit {
 
     }
 
-    testConnection(connectionGroup) {
+    testConnection(connectionGroup: CONNECTION_GROUP) {
+        switch (connectionGroup) {
+            case CONNECTION_GROUP.AWS_TO_S3:
+                this.appService.testConnection(this.connectionModel).subscribe((res) => {
+                    this.notificationService.showSuccess('Test connection successfull');
+                }, (error) => {
+                    this.notificationService.showError('System Temporarly Unavailable . Please try again');
+                });
+                break;
 
+            default:
+                break;
+        }
     }
 
     saveConnection(connectionGroup) {

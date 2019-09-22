@@ -1,11 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { AuthenticationService } from 'src/app/core/services/auth.service';
-import { User } from 'src/app/core/models/auth.models';
 
 @Component({
   selector: 'app-login',
@@ -58,20 +55,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
 
     this.loading = true;
-    // this.authenticationService.login(this.f.userName.value, this.f.password.value)
-    //   .subscribe(
-    //     data => {
-    //       this.notificationService.showSuccess('User Logged in successfully');
-    //       this.router.navigate([this.returnUrl]);
-    //     },
-    //     error => {
-    //       this.error = error;
-    //       this.loading = false;
-    //     });
-    let currentuser = new User();
-    currentuser.email = "admin@admin.com";
-    this.authenticationService.setUser(currentuser);
-    this.notificationService.showSuccess('User Logged in successfully');
-    this.router.navigate([this.returnUrl]);
+    this.authenticationService.login(this.f.userName.value, this.f.password.value)
+      .subscribe(
+        res => {
+          if (res["id"] != undefined && res["id"] != null) {
+            this.authenticationService.setUser(res);
+            this.notificationService.showSuccess('User Logged in successfully');
+            this.router.navigate([this.returnUrl]);
+          }
+          else {
+            this.notificationService.showError('UserName / Password is wrong');
+          }
+        },
+        error => {
+          this.notificationService.showError(error || 'Encountered Error while login');
+          this.loading = false;
+        });
   }
 }

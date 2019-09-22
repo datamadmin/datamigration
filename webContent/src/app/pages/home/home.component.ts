@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+// import * as Highcharts from 'highcharts';
+// require('highcharts/highcharts-3d.js')(Highcharts);
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -8,6 +11,7 @@ import { Router } from '@angular/router';
 })
 
 export class HomeComponent implements OnInit {
+
 
   // bread crumb items
   breadCrumbItems: Array<{}>;
@@ -20,8 +24,6 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    this.breadCrumbItems = [{ label: 'Home', active: true }];
-
     this.requestStatusChartConfig = {
       type: 'pie',
       title: {

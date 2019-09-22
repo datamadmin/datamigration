@@ -3,17 +3,42 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from '../services/cookie.service';
 
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
-    constructor(private http: HttpClient, private cookieService: CookieService) { }
+    constructor(
+        private http: HttpClient,
+        private cookieService: CookieService,
+        private authenticationService: AuthenticationService
+    ) { }
 
-    login(email: string, password: string) {
-        return this.http.post<any>(`/api/login`, { email, password });
+    addUser(userModel: any) {
+        return this.http.post(`${environment.apiUrl}/users/save`, userModel);
     }
-    logout() {
-        // remove user from local storage to log user out
-        this.cookieService.deleteCookie('currentUser');
+
+    updateUser(userModel: any) {
+        return this.http.post(`${environment.apiUrl}/users/save`, userModel);
+    }
+
+    deleteUser(userId: any) {
+        return this.http.delete(`${environment.apiUrl}/users/delete/${userId}`);
+    }
+
+    resetPassword(password: any) {
+        const params = {
+            "id": this.authenticationService.currentUser()["id"],
+            "password": password
+        }
+        return this.http.get(`${environment.apiUrl}/users/resetPassword`, { params });
+    }
+
+    forgotPassword(userName: any, emailid: any) {
+        const params = {
+            "userName": userName,
+            "emailid": emailid
+        }
+        return this.http.get(`${environment.apiUrl}/users/forgotPassword`, { params });
     }
 
     getAllBasketItems(): any {
@@ -28,15 +53,16 @@ export class AppService {
         return this.http.get(`${environment.apiUrl}/history/main/all`);
     }
 
-    addUser(userModel: any) {
-        return this.http.post(`${environment.apiUrl}/users/save`, userModel);
+    getHistoryDetailsById(requestNumber: any) {
+        return this.http.get(`${environment.apiUrl}/history/all/${requestNumber}`);
     }
 
-    updateUser(userModel: any) {
-        return this.http.post(`${environment.apiUrl}/users/save`, userModel);
+    testConnection(connectionModel: any) {
+        return this.http.post(`${environment.apiUrl}/connection/validate`, connectionModel);
     }
 
-    deleteUser(userId: any) {
-        return this.http.delete(`${environment.apiUrl}/users/delete/${userId}`);
+    saveConnection(connectionModel: any) {
+        return this.http.post(`${environment.apiUrl}/connection/save`, connectionModel);
     }
+
 }

@@ -17,13 +17,16 @@ export class TopbarComponent implements OnInit {
   @Output() settingsButtonClicked = new EventEmitter();
   @Output() mobileMenuButtonClicked = new EventEmitter();
 
-  basketCount:number;
+  basketCount: number;
+
+  currentUser: any;
 
   constructor(private router: Router, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.openMobileMenu = false;
-    this.basketCount=0;
+    this.basketCount = 0;
+    this.currentUser = this.authService.currentUser();
   }
 
   /**

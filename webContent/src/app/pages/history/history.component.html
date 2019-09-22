@@ -30,8 +30,9 @@
                                                 <a href="javascript: void(0);" class="link"
                                                     (click)="openReconDetails(rowData)">{{rowData[col.field]}}</a>
                                             </span>
-                                            <span *ngSwitchCase="'tokenizationFlag'">
-                                                <i [ngClass]="rowData[col.field] ? 'fas fa-check' : 'fas fa-times'"></i>
+                                            <span *ngSwitchCase="'tknztnEnabled'">
+                                                <i
+                                                    [ngClass]="rowData[col.field]=='Y' ? 'fas fa-check' : 'fas fa-times'"></i>
                                             </span>
                                             <span *ngSwitchCase="'status'">
                                                 <span *ngIf="rowData.status=='Completed'"
@@ -84,13 +85,12 @@
                                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                                     <tr>
                                         <td *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <span *ngSwitchCase="'requestStatus'">
-                                                <span *ngIf="rowData.requestStatus=='Completed'"
+                                            <span *ngSwitchCase="'status'">
+                                                <span *ngIf="rowData.status=='Completed'"
                                                     class="badge badge-success">Completed</span>
-                                                <span *ngIf="rowData.requestStatus=='In Progress'"
-                                                    class="badge badge-info">In
+                                                <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In
                                                     Process</span>
-                                                <span *ngIf="rowData.requestStatus=='Error'"
+                                                <span *ngIf="rowData.status=='Error'"
                                                     class="badge badge-danger">Error</span>
                                             </span>
                                             <span *ngSwitchDefault>

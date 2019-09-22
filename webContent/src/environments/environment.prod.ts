@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:65505/datamigration'
+  apiUrl: 'http://localhost:64289/datamigration'
 };
