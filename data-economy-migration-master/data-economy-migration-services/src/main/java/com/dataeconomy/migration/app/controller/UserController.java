@@ -6,7 +6,6 @@ import java.util.List;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +34,7 @@ public class UserController {
 	}
 
 	@PostMapping("/save")
-	public UserDto saveUser(@RequestBody UserDto userDto) {
+	public String saveUser(@RequestBody UserDto userDto) {
 		return userService.saveUser(userDto);
 	}
 
@@ -57,5 +56,9 @@ public class UserController {
 	public boolean resetPassword(@RequestParam("id") String userId,@RequestParam("password") String password) {
 		System.out.println("**userName***"+userId+"password***"+userId);
 		return userService.resetPassword(userId,Base64.getEncoder().encodeToString(password.getBytes()));
+	}
+	@GetMapping("/forgotPassword")
+	public boolean forgotPassword(@RequestParam("userName") String userName,@RequestParam("emailid") String emailid) {
+		return userService.forgotPassword(userName,emailid);
 	}
 }

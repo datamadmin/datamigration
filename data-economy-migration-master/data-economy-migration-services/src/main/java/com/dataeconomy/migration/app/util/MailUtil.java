@@ -106,7 +106,7 @@ public class MailUtil {
 		message += "<tbody>";
 		message += "<tr>";
 		message += "<td>&nbsp;</td>";
-		message += "<td style='text-align:right'>HelpDesk-Data Migration Management System-AEMS</td>";
+		message += "<td style='text-align:right'>HelpDesk-Data Migration Management System-DMS</td>";
 		message += "</tr>";
 		message += "</tbody>";
 		message += "</table>";
@@ -127,5 +127,60 @@ public class MailUtil {
 		message += "</html>";
 		sendMail(message,email,"Data Migration Tool");
 	}
+//Forgot password
+	public static void senForgotPasswordalert(String username,String email,String password) throws Exception
+	{
+		// message contains HTML markups
+		String message = "<html>";
+		message += "<table align='center' cellspacing='30' width='100%' height='100%' style='background-color:#009688; font-family:Open Sans,Helvetica,Arial,sans-serif; font-size:14px; color:black; line-height:20px'>";
+		message += "<tbody>";
+		message += "<tr>";
+		message += "<td align='center' style='vertical-align:top'>";
+		message += "<table width='600' cellspacing='0' cellpadding='0' align='center' style='text-align:left; background-color:#88bd2d'>";
+		message += "<tbody>";
+		message += "<tr>";
+		message += "<td height='5' style='height:5px'></td>";
+		message += "</tr>";
+		message += "<tr>";
+		message += "<td>";
+		message += "<table width='100%' cellspacing='0' cellpadding='25' style='background:#ffffff'>";
+		message += "<tbody>";
+		message += "<tr>";
+		message += "Hi <b><u>"+username+" </u></b> Your Password For username:"+username+""
+				+ "  is  :"+password+" <b><u>" 
+				+ " </u></b>  <b>Please login using: <a href='http://localhost:8080/DataMigration'>http://localhost:8080/DataMigration</a>  <u>";
+		message += "</tr>";
+		message += "</tbody>";
+		message += "</table>";
+		message += "</td>";
+		message += "</tr>";
+		message += "<tr>";
+		message += "<td>";
+		message += "<table width='100%' cellspacing='0' cellpadding='25' style='color:white; font-weight:600'>";
+		message += "<tbody>";
+		message += "<tr>";
+		message += "<td>&nbsp;</td>";
+		message += "<td style='text-align:right'>HelpDesk-Data Migration Management System-DMS</td>";
+		message += "</tr>";
+		message += "</tbody>";
+		message += "</table>";
+		message += "</td>";
+		message += "</tr>";
+		message += "<tr>";
+		message += "<td style='background-color:#009688; padding:10px; font-size:12px; color:#666666'>";
+		message += "<table>";
+		message += "</table>";
+		message += "</td>";
+		message += "</tr>";
+		message += "</tbody>";
+		message += "</table>";
+		message += "</td>";
+		message += "</tr>";
+		message += "</tbody>";
+		message += "</table>";
+		message += "</html>";
+		sendMail(message,email,"Data Migration Tool");
+	}
+
 
 }

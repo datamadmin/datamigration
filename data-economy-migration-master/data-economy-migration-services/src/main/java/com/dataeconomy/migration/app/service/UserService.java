@@ -69,8 +69,13 @@ public class UserService {
 		}
 	}
 
-	public UserDto saveUser(UserDto userDto) {
+	public String saveUser(UserDto userDto) {
 		log.info(" UserService : saveUser() ");
+		List<DMUUsers> dmList = userRepository.checkUserExist(userDto.getUserName());
+		if(dmList!=null && dmList.size()>0)
+		{
+			return "User Already Exist Please try with other UserName!";
+		}
 		userDto.setCreatedBy(userDto.getUserName());
 		userDto.setCreatedDate(LocalDateTime.now());
 
@@ -93,16 +98,14 @@ public class UserService {
 					.updatedBy(userDto.getUpdatedBy())
 					.updatedDate(userDto.getUpdatedDate())
 					.build());
-			return UserDto.builder().emailid(dmuUser.getEmailid()).id(dmuUser.getId()).id(dmuUser.getId())
-					.userRole(dmuUser.getUserRole()).build();
+			return "User Created Successfully";
 		} catch (Exception exception) {
-			return UserDto.builder().build();
+			return "Unable to create User Please Contact Admin";
 		}
 	}
 
 	public boolean purgeUsers(String userId) {
 		try {
-			System.out.println("***password****"+userId);
 			userRepository.deleteById(userId);
 			return true;
 		} catch (Exception exception) {
@@ -111,7 +114,6 @@ public class UserService {
 	}
 	public boolean login(String userName,String password) {
 		try {
-			System.out.println("***password****"+password);
 			List<DMUUsers> dmList = userRepository.login(userName,password);
 			if(dmList!=null && dmList.size()>0)
 			{
@@ -121,7 +123,7 @@ public class UserService {
 			{
 				return false;
 			}
-			
+
 		} catch (Exception exception) {
 			return false;
 		}
@@ -161,5 +163,26 @@ public class UserService {
 			return false;
 		}
 	}
-	
+	public boolean forgotPassword(String userName,String emailid) {
+		try {
+			List<DMUUsers> dmList = userRepository.forgotPassword(userName,emailid);
+			if(dmList!=null && dmList.size()>0)
+			{
+				try {
+					MailUtil.senForgotPasswordalert(dmList.get(0).getUserName(), dmList.get(0).getEmailid(),new String(Base64.getDecoder().decode(dmList.get(0).getPassword())));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		} catch (Exception exception) {
+			return false;
+		}
+	}
+
 }
