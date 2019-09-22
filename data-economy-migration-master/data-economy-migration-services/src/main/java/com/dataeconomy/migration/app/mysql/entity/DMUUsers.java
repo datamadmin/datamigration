@@ -1,7 +1,11 @@
 package com.dataeconomy.migration.app.mysql.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,18 +23,23 @@ import lombok.NoArgsConstructor;
 public class DMUUsers {
 
 	@Id
-	@Column(name = "USER_ID", length = 20, nullable = false)
-	private String userId;
-
-	@Column(name = "USER_ROLE", length = 50, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id" ,length = 20, nullable = false)
+	private String id;
+	@Column(name = "USER_ROLE",length = 20, nullable = false)
 	private String userRole;
-
-	@Column(name = "EMAIL_ID", length = 100, nullable = true)
-	private String emailId;
-
-	@Column(name = "PASSWORD", length = 20, nullable = false)
+	@Column(name = "EMAIL_ID",length = 100, nullable = false)
+	private String emailid;
+	@Column(name = "password",length = 20, nullable = false)
 	private String password;
-
-	@Column(name = "SR_NO", length = 11, nullable = true)
-	private String srNo;
+	@Column(name = "USER_NAME",length = 30, nullable = false)
+	private String userName;
+	@Column(name = "createdBy")
+	private String createdBy;
+	@Column(name = "created_date")
+	private LocalDateTime createdDate;
+	@Column(name = "updatedby")
+	private String updatedBy;
+	@Column(name = "updateddate")
+	private LocalDateTime updatedDate;
 }
