@@ -1,8 +1,6 @@
 package com.dataeconomy.migration.app.util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -45,7 +43,7 @@ public class MailUtil {
 
 				public void run() {
 					try {
-						transport.connect("smtp.office365.com", "chiranjeevi.pasunuri@thinkartha.com", "charan@111");
+						transport.connect("smtp.gmail.com", "chiranjeevi.pasunuri@thinkartha.com", "charan@111");
 						transport.sendMessage(msg, msg.getAllRecipients());
 						System.out.println("Email sent!");
 					} catch (AddressException e) {

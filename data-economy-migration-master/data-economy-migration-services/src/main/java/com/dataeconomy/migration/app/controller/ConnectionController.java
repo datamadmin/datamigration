@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dataeconomy.migration.app.exception.DataMigrationException;
 import com.dataeconomy.migration.app.model.ConnectionDto;
 import com.dataeconomy.migration.app.service.ConnectionService;
 
@@ -17,7 +18,7 @@ public class ConnectionController {
 	private ConnectionService connectionService;
 
 	@RequestMapping("/validate")
-	public boolean validateConnection(@RequestBody ConnectionDto connectionDto) {
+	public boolean validateConnection(@RequestBody ConnectionDto connectionDto) throws DataMigrationException {
 		return connectionService.validateConnection(connectionDto);
 	}
 

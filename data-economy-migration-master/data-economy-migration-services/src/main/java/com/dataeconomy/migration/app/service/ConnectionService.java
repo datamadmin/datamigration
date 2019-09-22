@@ -1,17 +1,18 @@
 package com.dataeconomy.migration.app.service;
 
-import java.sql.Connection;
-import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.dataeconomy.migration.app.conn.service.HiveConnectionService;
+import com.dataeconomy.migration.app.conn.service.ImaplaConnectionService;
+import com.dataeconomy.migration.app.conn.service.SparkConnectionService;
+import com.dataeconomy.migration.app.exception.DataMigrationException;
 import com.dataeconomy.migration.app.model.ConnectionDto;
 import com.dataeconomy.migration.app.model.TGTOtherPropDto;
 import com.dataeconomy.migration.app.mysql.entity.DMUAuthentication;
@@ -24,6 +25,9 @@ import com.dataeconomy.migration.app.mysql.repository.DMUS3Repository;
 import com.dataeconomy.migration.app.mysql.repository.HDFSRepository;
 import com.dataeconomy.migration.app.mysql.repository.TGTFormatPropRepository;
 import com.dataeconomy.migration.app.mysql.repository.TGTOtherPropRepository;
+import com.dataeconomy.migration.app.service.aws.AwsFederatedTempCredentialsService;
+import com.dataeconomy.migration.app.service.aws.DMUAwsAssumeRoleCredentialsService;
+import com.dataeconomy.migration.app.service.aws.DMULongTermAwsCredentialsService;
 import com.dataeconomy.migration.app.util.Constants;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class ConnectionService {
+
+	// private Map<String, String> cache = Collections
+	// .synchronizedMap(new PassiveExpiringMap<String, String>(2, TimeUnit.HOURS));
 
 	@Value("${hs2.datasource.driver-class-name: com.cloudera.hive.jdbc41.HS2Driver}")
 	public String hs2Driver;
@@ -53,21 +60,68 @@ public class ConnectionService {
 	@Autowired
 	private TGTOtherPropRepository tgtOtherPropRepository;
 
-	public boolean validateConnection(ConnectionDto connectionDto) {
-		log.info(" ConnectionService :: validateConnection {} ",
-				Objects.toString(connectionDto, "Invlaid Connection parameters to test "));
-		Connection conn = null;
+	@Autowired
+	private HiveConnectionService hiveConnectionService;
+
+	@Autowired
+	private ImaplaConnectionService imaplaConnectionService;
+
+	@Autowired
+	private SparkConnectionService sparkConnectionService;
+
+	@Autowired
+	private AwsFederatedTempCredentialsService awsFederatedTempCredentialsService;
+
+	@Autowired
+	private DMULongTermAwsCredentialsService awsLongTermAwsCredentialsService;
+
+	@Autowired
+	private DMUAwsAssumeRoleCredentialsService awsAssumeRoleCredentialsService;
+
+	private String hiveConnString;
+
+	private String impalaConnString;
+
+	private String sparkConnString;
+
+	public boolean validateConnection(ConnectionDto connectionDto) throws DataMigrationException {
 		try {
-			String url = MessageFormat.format(hs2DriverUrl, connectionDto.getHiveHostName(),
-					connectionDto.getHivePortNmbr());
-			Class.forName(hs2Driver);
-			conn = java.sql.DriverManager.getConnection(url, "", "");
-			return conn.isValid(10);
+			if (StringUtils.equalsIgnoreCase(Constants.HIVE, connectionDto.getConnectionType())) {
+				Optional<String> hiveConnStringOpt = hiveConnectionService.getHiveConnectionDetails(connectionDto);
+				if (!hiveConnStringOpt.isPresent()) {
+					hiveConnString = hiveConnStringOpt.get();
+				}
+			}
+			if (StringUtils.equalsIgnoreCase(Constants.IMPALA, connectionDto.getConnectionType())) {
+				Optional<String> impalaConnStringOpt = imaplaConnectionService
+						.getImpalaConnectionDetails(connectionDto);
+				if (!impalaConnStringOpt.isPresent()) {
+					impalaConnString = impalaConnStringOpt.get();
+				}
+			}
+			if (StringUtils.equalsIgnoreCase(Constants.SPARK, connectionDto.getConnectionType())) {
+				Optional<String> sparkConnStringOpt = sparkConnectionService.getSparkConnectionDetails(connectionDto);
+				if (!sparkConnStringOpt.isPresent()) {
+					sparkConnString = sparkConnStringOpt.get();
+				}
+			}
+			if (StringUtils.equalsIgnoreCase(Constants.DIRECT_LC, connectionDto.getConnectionType())) {
+				awsLongTermAwsCredentialsService.validateLongTermAWSCredentials(connectionDto);
+			}
+
+			if (StringUtils.equalsIgnoreCase(Constants.DIRECT_SC, connectionDto.getConnectionType())) {
+				if (StringUtils.equalsIgnoreCase(connectionDto.getScCrdntlAccessType(), Constants.ASSUME)) {
+					awsAssumeRoleCredentialsService.getAwsAssumeRoleRequestCredentials(connectionDto);
+				} else if (StringUtils.equalsIgnoreCase(connectionDto.getScCrdntlAccessType(), Constants.ASSUME_SAML))
+					awsAssumeRoleCredentialsService.getAwsAssumeRoleRequestCredentials(connectionDto);
+			} else if (StringUtils.equalsIgnoreCase(Constants.AWS_FEDERATED_USER, connectionDto.getConnectionType())) {
+				awsFederatedTempCredentialsService.getFederatedCredentials(connectionDto);
+			} else {
+				throw new DataMigrationException("Invalid Connection Details for short term AWS Validation ");
+			}
+
 		} catch (Exception exception) {
-			log.info(" Exception occured at ConnectionService :: validateConnection {} ",
-					ExceptionUtils.getStackTrace(exception));
-		} finally {
-			DbUtils.closeQuietly(conn);
+			throw new DataMigrationException("Invalid Connection Details for Connection Validation");
 		}
 		return false;
 	}
@@ -155,4 +209,63 @@ public class ConnectionService {
 				.saveAndFlush(DMUHdfs.builder().impalaCnctnFlag("Y").impalaHostName(connectionDto.getImpalaHostName())
 						.impalaPortNmbr(Long.valueOf(connectionDto.getImpalaPortNmbr())).srNo(1L).build());
 	}
+
+	public void getConnectionObject(ConnectionDto connectionDto, String userId, String password) throws Exception {
+		try {
+			if (StringUtils.equalsIgnoreCase(Constants.YES, connectionDto.getHiveCnctnFlag())) {
+				Optional<String> hiveConnectionUrl = hiveConnectionService.getHiveConnectionDetails(connectionDto);
+				if (hiveConnectionUrl.isPresent()) {
+
+				} else {
+					throw new Exception("Not a valid Hive Connection Details!");
+				}
+			} else if (StringUtils.equalsIgnoreCase(Constants.YES, connectionDto.getImpalaCnctnFlag())) {
+				Optional<String> impalaConnectionUrl = imaplaConnectionService
+						.getImpalaConnectionDetails(connectionDto);
+				if (impalaConnectionUrl.isPresent()) {
+
+				} else {
+					throw new Exception("Not a valid Hive Connection Details!");
+				}
+			} else if (StringUtils.equalsIgnoreCase(Constants.YES, connectionDto.getSparkCnctnFlag())) {
+				Optional<String> sparkConnectionUrl = sparkConnectionService.getSparkConnectionDetails(connectionDto);
+				if (sparkConnectionUrl.isPresent()) {
+
+				} else {
+					throw new Exception("Not a valid Hive Connection Details!");
+				}
+			} else {
+				throw new Exception("Not a valid Authentication Details!");
+			}
+		} catch (Exception exception) {
+			log.info(" Exception occured at ConnectionService :: getConnectionObject {} ",
+					ExceptionUtils.getStackTrace(exception));
+			throw exception;
+		}
+	}
+
+	public String getHiveConnString() {
+		return hiveConnString;
+	}
+
+	public void setHiveConnString(String hiveConnString) {
+		this.hiveConnString = hiveConnString;
+	}
+
+	public String getImpalaConnString() {
+		return impalaConnString;
+	}
+
+	public void setImpalaConnString(String impalaConnString) {
+		this.impalaConnString = impalaConnString;
+	}
+
+	public String getSparkConnString() {
+		return sparkConnString;
+	}
+
+	public void setSparkConnString(String sparkConnString) {
+		this.sparkConnString = sparkConnString;
+	}
+
 }

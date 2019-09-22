@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dataeconomy.migration.app.model.DMUBasketDto;
@@ -39,5 +40,11 @@ public class DMUBasketController {
 	@DeleteMapping("/delete/{userId}")
 	public boolean purgeBasketDetails(@PathParam("userId") String userId) {
 		return dmuBasketService.purgeBasketDetailsByUserId(userId);
+	}
+
+	@GetMapping("/search")
+	public List<DMUBasketDto> getBasketDetailsBySearchParam(
+			@RequestParam(value = "searchParam", required = true) String searchParam) {
+		return dmuBasketService.getBasketDetailsBySearchParam(searchParam);
 	}
 }

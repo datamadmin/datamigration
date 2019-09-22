@@ -39,7 +39,7 @@ public class DMUAuthentication {
 	@Column(name = "LDAP_DOMAIN_NAME", length = 200, nullable = true)
 	private String ldapDomainName;
 
-	@Column(name = "KERBEROS_CNCTN_FLAG", length = 200, nullable = true)
+	@Column(name = "KERBEROS_CNCTN_FLAG", length = 1, nullable = true)
 	private String kerberosCnctnFlag;
 
 	@Column(name = "KERBEROS_HOST_REALM", length = 1, nullable = true)

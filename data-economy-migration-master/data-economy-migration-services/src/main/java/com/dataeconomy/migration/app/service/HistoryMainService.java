@@ -24,9 +24,7 @@ public class HistoryMainService {
 	private HistoryMainRepsitory historyMainRepository;
 
 	public List<HistoryMainDto> getAllHistoryMainDetails() {
-
 		log.info(" HistoryMainService :: getAllHistoryMainDetails ");
-
 		try {
 			List<DMUHistoryMain> dmuHistoryDetailOpt = historyMainRepository.findAll();
 			return Optional.ofNullable(dmuHistoryDetailOpt).orElse(new ArrayList<>()).stream()

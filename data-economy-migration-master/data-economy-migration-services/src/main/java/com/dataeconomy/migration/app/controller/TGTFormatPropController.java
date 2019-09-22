@@ -2,10 +2,11 @@ package com.dataeconomy.migration.app.controller;
 
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,12 @@ public class TGTFormatPropController {
 	}
 
 	@GetMapping("/all/{requestNumber}")
-	public TGTFormatPropDto getAllTGTFormatProp(@PathParam("requestNumber") String requestNumber) {
+	public TGTFormatPropDto getAllTGTFormatProp(@PathVariable("requestNumber") Long requestNumber) {
 		return tgtFormatPropService.getAllTGTFormatProp(requestNumber);
+	}
+
+	@PostMapping("/save")
+	public TGTFormatPropDto saveTGTFormat(@RequestBody TGTFormatPropDto tgtFormatPropDto) {
+		return tgtFormatPropService.saveTGTFormat(tgtFormatPropDto);
 	}
 }

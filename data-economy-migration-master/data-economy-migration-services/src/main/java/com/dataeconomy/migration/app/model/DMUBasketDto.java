@@ -23,10 +23,14 @@ public class DMUBasketDto {
 
 	private String targetS3Bucket;
 
-	private String inccrementalFlag;
+	private String incrementalFlag;
 
 	private String incrementalClmn;
 
 	private String labelName;
+
+	private boolean tknztnEnabled;
+
+	private String tknztnFilePath;
 
 }

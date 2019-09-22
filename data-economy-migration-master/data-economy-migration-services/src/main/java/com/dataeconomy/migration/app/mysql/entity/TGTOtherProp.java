@@ -19,13 +19,34 @@ import lombok.NoArgsConstructor;
 public class TGTOtherProp {
 
 	@Id
-	@Column(name = "SR_NO", length = 11, nullable = true)
+	@Column(name = "SR_NO", length = 11, nullable = false)
 	private Long srNo;
 
-	@Column(name = "PARALLEL_JOBS", length = 11, nullable = false)
+	@Column(name = "PARALLEL_JOBS", length = 11, nullable = true)
 	private Long parallelJobs;
 
-	@Column(name = "PARALLEL_USR_RQST", length = 11, nullable = false)
+	@Column(name = "PARALLEL_USR_RQST", length = 11, nullable = true)
 	private Long parallelUsrRqst;
+
+	@Column(name = "TEMP_HIVE_DB", length = 50, nullable = true)
+	private String tempHiveDB;
+
+	@Column(name = "TEMP_HDFS_DIR", length = 200, nullable = true)
+	private String tempHdfsDir;
+
+	@Column(name = "TOKENIZATION_IND", length = 20, nullable = true)
+	private String tokenizationInd;
+
+	@Column(name = "PTGY_DIR_PATH", length = 200, nullable = true)
+	private String ptgyDirPath;
+
+	@Column(name = "HDFS_EDGE_NODE", length = 200, nullable = true)
+	private String hdfcEdgeNode;
+
+	@Column(name = "HDFS_USER_NAME", length = 50, nullable = true)
+	private String hdfsUserName;
+
+	@Column(name = "HDFS_PEM_LOCATION", length = 100, nullable = true)
+	private String hdfsPemLocation;
 
 }

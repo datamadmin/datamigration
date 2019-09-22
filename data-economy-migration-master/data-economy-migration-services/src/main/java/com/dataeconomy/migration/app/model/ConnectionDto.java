@@ -15,9 +15,15 @@ import lombok.NoArgsConstructor;
 @JsonInclude(Include.NON_NULL)
 public class ConnectionDto {
 
+	private String connectionType;
+
 	private Long srNo;
 
+	private String domain;
+
 	private TGTOtherPropDto tgtOtherPropDto;
+
+	private TGTFormatPropDto tgtFormatPropDto;
 
 	private String hiveCnctnFlag;
 
@@ -63,7 +69,7 @@ public class ConnectionDto {
 
 	private String inlineSesnPolicy;
 
-	private Long duration;
+	private Integer duration;
 
 	private String ldapUserName;
 

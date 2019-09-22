@@ -12,8 +12,11 @@ import com.dataeconomy.migration.app.mysql.entity.DMUBasketTemp;
 @Repository
 public interface BasketTempRepository extends JpaRepository<DMUBasketTemp, Long> {
 
-	@Query(" SELECT dmu FROM DMUBasketTemp dmu where dmu.userId = :userId ORDER BY userId.srNo, userId.labelName")
+	@Query("SELECT dmu FROM DMUBasketTemp dmu where dmu.userId = :userId ORDER BY userId.srNo, userId.labelName")
 	public List<DMUBasketTemp> getBasketDetailsByUserId(@Param("userId") String userId);
+
+	@Query("SELECT dmu FROM DMUBasketTemp dmu where dmu.userId = :userId ORDER BY userId.srNo ASC")
+	public List<DMUBasketTemp> getBasketDetailsByRequestNo(@Param("userId") String userId);
 
 	@Query("DELETE FROM DMUBasketTemp dmu where dmu.userId = :userId")
 	public void deleteById(@Param("userId") String userId);
