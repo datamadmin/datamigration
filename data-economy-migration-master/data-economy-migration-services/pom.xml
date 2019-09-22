@@ -22,13 +22,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<impala.jdbc.version>2.5.5.1007</impala.jdbc.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -69,6 +69,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.4</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
@@ -80,11 +85,15 @@
 		</dependency>
 
 		<!-- AWS Dependencies -->
-		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk-s3</artifactId>
-			<version>1.11.635</version>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.327</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-dynamodb</artifactId>
+			<version>1.11.327</version>
 		</dependency>
 		<!-- Mail Dependencies -->
 
@@ -93,8 +102,46 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<!-- End AWS Dependencies -->
 
-		<!-- Hive dependencies -->
+		<!-- Imapala Dependencies -->
+		<dependency>
+			<groupId>com.cloudera.impala.jdbc</groupId>
+			<artifactId>hive_metastore</artifactId>
+			<version>${impala.jdbc.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/HiveJDBC41.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.cloudera.impala.jdbc</groupId>
+			<artifactId>hive_service</artifactId>
+			<version>${impala.jdbc.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/HiveJDBC41.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.cloudera.impala.jdbc</groupId>
+			<artifactId>ImpalaJDBC4</artifactId>
+			<version>${impala.jdbc.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/HiveJDBC41.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.cloudera.impala.jdbc</groupId>
+			<artifactId>ql</artifactId>
+			<version>${impala.jdbc.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/HiveJDBC41.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.cloudera.impala.jdbc</groupId>
+			<artifactId>TCLIServiceClient</artifactId>
+			<version>${impala.jdbc.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/HiveJDBC41.jar</systemPath>
+		</dependency>
+		<!-- End Impala Dependencies -->
+
 		<dependency>
 			<groupId>org.apache.hive</groupId>
 			<artifactId>hive-jdbc</artifactId>
@@ -126,8 +173,20 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat</groupId>
+					<artifactId>tomcat-jdbc</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
+		<dependency>
+			<groupId>Hive</groupId>
+			<artifactId>HiveJDBC41</artifactId>
+			<version>2.5.16.1044</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/HiveJDBC41.jar</systemPath>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-client</artifactId>
@@ -196,6 +255,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -231,6 +293,26 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.basedir}/src/main/resources/HiveJDBC41.jar</file>
+							<groupId>Hive</groupId>
+							<artifactId>HiveJDBC41</artifactId>
+							<version>2.5.16.1044</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin> -->
 		</plugins>
 	</build>
 	<dependencyManagement>
@@ -244,4 +326,30 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>codelds</id>
+			<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		</repository>
+		<repository>
+			<id>cdh.repo</id>
+			<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+			<name>Cloudera Repositories</name>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>central</id>
+			<url>http://repo1.maven.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
