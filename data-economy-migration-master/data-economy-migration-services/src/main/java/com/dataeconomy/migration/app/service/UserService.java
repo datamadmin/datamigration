@@ -112,21 +112,18 @@ public class UserService {
 			return false;
 		}
 	}
-	public boolean login(String userName,String password) {
+	public DMUUsers login(String userName,String password) {
+		DMUUsers udto = new DMUUsers();
 		try {
 			List<DMUUsers> dmList = userRepository.login(userName,password);
 			if(dmList!=null && dmList.size()>0)
 			{
-				return true;
-			}
-			else
-			{
-				return false;
+				udto = dmList.get(0);
 			}
 
 		} catch (Exception exception) {
-			return false;
 		}
+		return udto;
 	}
 
 

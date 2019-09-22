@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dataeconomy.migration.app.model.UserDto;
+import com.dataeconomy.migration.app.mysql.entity.DMUUsers;
 import com.dataeconomy.migration.app.service.UserService;
 
 @RestController
@@ -48,7 +49,7 @@ public class UserController {
 		return userService.purgeUsers(userId);
 	}
 	@GetMapping("/login")
-	public boolean login(@RequestParam("userName") String userName,@RequestParam("password") String password) {
+	public DMUUsers login(@RequestParam("userName") String userName,@RequestParam("password") String password) {
 		System.out.println("**userName***"+userName+"password***"+password);
 		return userService.login(userName,Base64.getEncoder().encodeToString(password.getBytes()));
 	}
