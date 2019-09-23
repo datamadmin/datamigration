@@ -110,6 +110,12 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.activation/activation -->
+<dependency>
+    <groupId>javax.activation</groupId>
+    <artifactId>activation</artifactId>
+    <version>1.1.1</version>
+</dependency>
 		<!-- https://mvnrepository.com/artifact/javax.xml.crypto/jsr105-api -->
 		<dependency>
 			<groupId>javax.xml.crypto</groupId>
@@ -135,12 +141,6 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/javax.activation/activation -->
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
-		</dependency>
 		<!-- End AWS Dependencies -->
 
 		<!-- Imapala Dependencies -->
@@ -165,9 +165,13 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/resources/ImpalaJDBC41.jar</systemPath>
 		</dependency>
-		<!-- <dependency> <groupId>com.cloudera.impala.jdbc</groupId> <artifactId>ql</artifactId> 
-			<version>${impala.jdbc.version}</version> <scope>system</scope> <systemPath>${project.basedir}/src/main/resources/q1.jar</systemPath> 
-			</dependency> -->
+		<!-- <dependency>
+			<groupId>com.cloudera.impala.jdbc</groupId>
+			<artifactId>ql</artifactId>
+			<version>${impala.jdbc.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/q1.jar</systemPath>
+		</dependency> -->
 		<dependency>
 			<groupId>com.cloudera.impala.jdbc</groupId>
 			<artifactId>TCLIServiceClient</artifactId>
