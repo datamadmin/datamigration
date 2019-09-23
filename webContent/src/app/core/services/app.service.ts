@@ -24,11 +24,14 @@ export class AppService {
     }
 
     updateUser(userModel: any) {
-        return this.http.post(`${environment.apiUrl}/users/save`, userModel);
+        return this.http.post(`${environment.apiUrl}/users/edit`, userModel);
     }
 
     deleteUser(userId: any) {
-        return this.http.delete(`${environment.apiUrl}/users/delete/${userId}`);
+	 const params = {
+            "userId": userId
+			}
+        return this.http.get(`${environment.apiUrl}/users/delete`,{ params });
     }
 
     resetPassword(password: any) {
