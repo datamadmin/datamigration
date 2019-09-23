@@ -49,7 +49,7 @@ public class UserService {
 	}
 
 	public UserDto getUser(String userName) {
-		log.info(" UserService : getUser() "); 
+		log.info(" UserService : getUser() ");
 		try {
 			Optional<DMUUsers> dmuUsersOptional = userRepository.findById(userName);
 			if (dmuUsersOptional.isPresent()) {
@@ -69,12 +69,12 @@ public class UserService {
 		}
 	}
 
-	public String saveUser(UserDto userDto) {
+	public boolean saveUser(UserDto userDto) throws Exception {
 		log.info(" UserService : saveUser() ");
 		List<DMUUsers> dmList = userRepository.checkUserExist(userDto.getUserName());
 		if(dmList!=null && dmList.size()>0)
 		{
-			return "User Already Exist Please try with other UserName!";
+			throw new Exception("User Already Exist!");
 		}
 		userDto.setCreatedBy(userDto.getUserName());
 		userDto.setCreatedDate(LocalDateTime.now());
@@ -98,9 +98,9 @@ public class UserService {
 					.updatedBy(userDto.getUpdatedBy())
 					.updatedDate(userDto.getUpdatedDate())
 					.build());
-			return "User Created Successfully";
+			return true;
 		} catch (Exception exception) {
-			return "Unable to create User Please Contact Admin";
+			throw new Exception("Unable to create User Please Contact Admin");
 		}
 	}
 

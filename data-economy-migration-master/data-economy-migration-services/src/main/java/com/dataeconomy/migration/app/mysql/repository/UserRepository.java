@@ -13,12 +13,13 @@ import com.dataeconomy.migration.app.mysql.entity.DMUUsers;
 public interface UserRepository extends JpaRepository<DMUUsers, String> {
 	
 	@Query(" SELECT dmu FROM DMUUsers dmu where dmu.userName = :userName and dmu.password =:password ")
-	public List<DMUUsers> login(@Param("userName") String userName, @Param("password") String password);
-
+	public List<DMUUsers> login(@Param("userName") String userName,@Param("password") String password);
+	
 	@Query(" SELECT dmu FROM DMUUsers dmu where dmu.userName = :userName and dmu.emailid =:emailid ")
-	public List<DMUUsers> forgotPassword(@Param("userName") String userName, @Param("emailid") String emailid);
-
+	public List<DMUUsers> forgotPassword(@Param("userName") String userName,@Param("emailid") String emailid);
+	
 	@Query(" SELECT dmu FROM DMUUsers dmu where dmu.userName = :userName")
 	public List<DMUUsers> checkUserExist(@Param("userName") String userName);
+	
 	
 }
