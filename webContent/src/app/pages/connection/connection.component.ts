@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/core/services/app.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { AuthenticationService } from 'src/app/core/services/auth.service';
 
 enum CONNECTION_GROUP {
     AWS_TO_S3 = "AWS_TO_S3",
@@ -22,10 +23,12 @@ export class ConnectionComponent implements OnInit {
 
     awsToS3ConnectionFlag: boolean = false;
     hdfsConnectionFlag: boolean = false;
+    isAdmin: boolean = false;
 
     constructor(
         private appService: AppService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private authenticationService: AuthenticationService
     ) { }
 
 
@@ -86,6 +89,7 @@ export class ConnectionComponent implements OnInit {
 
     ngOnInit() {
         this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'Settings', active: true }, { label: 'Connection', active: true }];
+        this.isAdmin = this.authenticationService.currentUser()["userRole"] === 'Admin' ? true : false;
     }
 
     cancelConnection(connectionGroup: CONNECTION_GROUP) {
@@ -145,7 +149,7 @@ export class ConnectionComponent implements OnInit {
                 this.notificationService.showSuccess('Test connection successfull');
             }, (error) => {
                 this.markConnectionFlag(connectionGroup, false);
-                this.notificationService.showError(error || 'System Temporarly Unavailable . Please try again');
+                this.notificationService.showError(error.message || 'System Temporarly Unavailable . Please try again');
             });
         }
     }
@@ -153,9 +157,10 @@ export class ConnectionComponent implements OnInit {
     saveConnection(connectionGroup) {
         if (this.validateConnectionDetails(connectionGroup)) {
             this.appService.saveConnection(this.connectionModel).subscribe((res) => {
+                this.markConnectionFlag(connectionGroup, false);
                 this.notificationService.showSuccess('Connection saved successfull');
             }, (error) => {
-                this.notificationService.showError(error || 'System Temporarly Unavailable . Please try again');
+                this.notificationService.showError(error.message || 'System Temporarly Unavailable . Please try again');
             });
         }
     }

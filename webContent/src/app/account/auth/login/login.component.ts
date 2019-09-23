@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.notificationService.showError(error || 'Encountered Error while login');
+          this.notificationService.showError(error.message || 'Encountered Error while login');
           this.loading = false;
         });
   }

@@ -13,6 +13,12 @@ export class AppService {
         private authenticationService: AuthenticationService
     ) { }
 
+    private getCurrentUserId(): any {
+        let currentUserId = this.authenticationService.currentUser()["id"];
+        console.log(currentUserId);
+        return currentUserId;
+    }
+
     addUser(userModel: any) {
         return this.http.post(`${environment.apiUrl}/users/save`, userModel);
     }
@@ -27,7 +33,7 @@ export class AppService {
 
     resetPassword(password: any) {
         const params = {
-            "id": this.authenticationService.currentUser()["id"],
+            "id": this.getCurrentUserId(),
             "password": password
         }
         return this.http.get(`${environment.apiUrl}/users/resetPassword`, { params });
@@ -45,6 +51,10 @@ export class AppService {
         return this.http.get(`${environment.apiUrl}/basket/all`);
     }
 
+    clearAllBasketItems(): any {
+        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserId()}`);
+    }
+
     getAllUsers(): any {
         return this.http.get(`${environment.apiUrl}/users/all`);
     }
@@ -53,8 +63,16 @@ export class AppService {
         return this.http.get(`${environment.apiUrl}/history/main/all`);
     }
 
-    getHistoryDetailsById(requestNumber: any) {
-        return this.http.get(`${environment.apiUrl}/history/all/${requestNumber}`);
+    getHistoryDetailsById(requestNo: any) {
+        return this.http.get(`${environment.apiUrl}/history/all/${requestNo}`);
+    }
+
+    getReconMainList() {
+        return this.http.get(`${environment.apiUrl}/recon/all`);
+    }
+
+    getReconDetailsById(requestNo: any) {
+        return this.http.get(`${environment.apiUrl}/recon/detail/details/${requestNo}`);
     }
 
     testConnection(connectionModel: any) {

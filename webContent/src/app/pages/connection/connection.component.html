@@ -36,7 +36,8 @@
                                                     <label for="awsSecretKeyLc" class="col-sm-2 col-form-label">AWS
                                                         Secret Key</label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" [(ngModel)]="connectionModel.awsSecretKeyLc"
+                                                        <input type="password"
+                                                            [(ngModel)]="connectionModel.awsSecretKeyLc"
                                                             name="awsSecretKeyLc" pInputText class="form-control">
                                                     </div>
                                                 </div>
@@ -61,7 +62,8 @@
                                                     <label for="awsSecretKeySc" class="col-sm-2 col-form-label">AWS
                                                         Secret Key</label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" [(ngModel)]="connectionModel.awsSecretKeySc"
+                                                        <input type="password"
+                                                            [(ngModel)]="connectionModel.awsSecretKeySc"
                                                             name="awsSecretKeySc" pInputText class="form-control">
                                                     </div>
                                                 </div>
@@ -152,7 +154,8 @@
                                                     <label for="ldapUserPassw" class="col-sm-2 col-form-label">LDAP User
                                                         Password</label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" [(ngModel)]="connectionModel.ldapUserPassw"
+                                                        <input type="password"
+                                                            [(ngModel)]="connectionModel.ldapUserPassw"
                                                             name="ldapUserPassw" pInputText class="form-control">
                                                     </div>
                                                 </div>
@@ -193,7 +196,7 @@
                                                     </div>
                                                 </div>
                                             </ng-template>
-                                            <div class="form-group row mt-4">
+                                            <div class="form-group row mt-4" *ngIf="isAdmin">
                                                 <div class="col-12">
                                                     <div class="float-left">
                                                         <div class="btn-group">
@@ -207,7 +210,8 @@
                                                             <button class="btn btn-light mr-2" type="button"
                                                                 (click)="cancelConnection('AWS_TO_S3')">Cancel</button>
                                                             <button class="btn btn-info" type="button"
-                                                                (click)="saveConnection('AWS_TO_S3')">Save</button>
+                                                                (click)="saveConnection('AWS_TO_S3')"
+                                                                [disabled]="!awsToS3ConnectionFlag">Save</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -403,7 +407,7 @@
                                                 </div>
                                             </ng-template>
 
-                                            <div class="form-group row mt-4">
+                                            <div class="form-group row mt-4" *ngIf="isAdmin">
                                                 <div class="col-12">
                                                     <div class="float-left">
                                                         <div class="btn-group">
@@ -453,7 +457,7 @@
                                                     </label>
                                                     <div class="col-sm-4">
                                                         <input type="text"
-                                                            [(ngModel)]="connectionModel.targetFileProps.textFormat.fieldDelimiter"
+                                                            [(ngModel)]="connectionModel.tgtFormatPropDto.fieldDelimiter"
                                                             name="fieldDelimiter" pInputText class="form-control">
                                                     </div>
                                                 </div>
@@ -509,7 +513,7 @@
                                                 </p-radioButton>
                                             </div>
 
-                                            <div class="form-group row mt-4">
+                                            <div class="form-group row mt-4" *ngIf="isAdmin">
                                                 <div class="col-12">
                                                     <div class="float-right">
                                                         <div class="btn-group">
@@ -635,7 +639,7 @@
                                                 </div>
                                             </ng-template>
 
-                                            <div class="form-group row mt-4">
+                                            <div class="form-group row mt-4" *ngIf="isAdmin">
                                                 <div class="col-12">
                                                     <div class="float-right">
                                                         <div class="btn-group">

@@ -14,7 +14,7 @@ export class AuthenticationService {
 
     initCurrentUser() {
         if (this.cookieService.getCookie('currentUser')) {
-            this.user = this.cookieService.getCookie('currentUser');
+            this.user = JSON.parse(this.cookieService.getCookie('currentUser'));
         }
     }
 

@@ -4,7 +4,15 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="ui-g">
+                    <div class="ui-g ">
+                        <div class="ui-g-12 text-right">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-rounded btn-danger" type="button"
+                                    (click)="clearClickFunction()"><i class="fas fa-times mr-2"></i>Clear All</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g mt-4">
                         <div class="ui-g-12">
                             <p-table [paginator]="true" [rows]="10" [style]="{width:'100%'}" [scrollable]="true"
                                 [columns]="tableCols" [value]="tableData">
@@ -18,7 +26,7 @@
                                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                                     <tr>
                                         <td *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <span *ngSwitchCase="'inccrementalFlag'">
+                                            <span *ngSwitchCase="'incrementalFlag'">
                                                 <i
                                                     [ngClass]="rowData[col.field]=='Y' ? 'fas fa-check' : 'fas fa-times'"></i>
                                             </span>
@@ -31,7 +39,7 @@
                             </p-table>
                         </div>
                     </div>
-                    <div class=" float-right">
+                    <div class=" float-right" *ngIf="tableData.length>0">
                         <button class="btn btn-light mr-2" type="button" (click)="onCancelFunction()">Cancel</button>
                         <button class="btn  btn-info" type="button" (click)="onContinueFunction()">Submit</button>
                     </div>

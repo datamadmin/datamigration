@@ -133,7 +133,7 @@ export class UserComponent implements OnInit {
                 },
                 (error) => {
                     this.isAdd = true;
-                    this.notificationService.showError("Error while creating user");
+                    this.notificationService.showError(error.message || "Error while creating user");
                 });
         }
 
@@ -149,7 +149,7 @@ export class UserComponent implements OnInit {
                 },
                 (error) => {
                     this.isUpdate = true;
-                    this.notificationService.showError("Error while updating user information");
+                    this.notificationService.showError(error.message || "Error while updating user information");
                 });
         }
     }

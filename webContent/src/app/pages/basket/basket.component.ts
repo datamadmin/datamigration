@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from 'src/app/core/services/app.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
     selector: 'app-basket',
@@ -18,7 +19,8 @@ export class BasketComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private appService: AppService
+        private appService: AppService,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit() {
@@ -35,7 +37,7 @@ export class BasketComponent implements OnInit {
             { field: 'tableName', header: 'Table Name' },
             { field: 'filterCondition', header: 'Filter Condition' },
             { field: 'targetS3Bucket', header: 'Target Bucket Name' },
-            { field: 'inccrementalFlag', header: 'Incremental Flag' },
+            { field: 'incrementalFlag', header: 'Incremental Flag' },
             { field: 'incrementalClmn', header: 'Incremental Column' }
         ];
     }
@@ -60,5 +62,19 @@ export class BasketComponent implements OnInit {
 
     onContinueFunction() {
         this.router.navigate(['/app/history']);
+    }
+
+    clearClickFunction() {
+        this.appService.clearAllBasketItems().subscribe(
+            (res: any) => {
+                this.tableData = [];
+                this.notificationService.showSuccess("Basket items cleared successfully ");
+                setTimeout(() => {
+                    this._fetchData();
+                }, 10);
+            },
+            (error) => {
+                this.notificationService.showError(error.message || "System Temporarly unavailable");
+            });
     }
 }
