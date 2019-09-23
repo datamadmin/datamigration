@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -18,37 +17,34 @@ public class MailUtil {
 	{
 		return getClass().getClassLoader().getResource("application.properties").getFile();
 	}
-	public static void sendMail(String msg,String email,String subject) throws Exception
+	public static void sendMail(String message,String email,String subject) throws Exception
 	{
 		/*MailUtil m = new MailUtil();
 		InputStream input = new FileInputStream(m.getFileName());
 		Properties prop = new Properties();
 		prop.load(input);*/
 		//System.out.println("Email HOST***!"+prop.getProperty("SMTP_HOST"));
-		Properties props = new Properties();    
-		props.put("mail.smtp.host", "smtp.gmail.com");        
-		props.put("mail.smtp.auth", "true");    
-		props.put("mail.smtp.port", "587");   
-		props.put("mail.smtp.starttls.enable", "true");   
+		Properties props = System.getProperties();
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.port", "587"); 
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.auth", "true");
 
-
-		//get Session   
-		Session session = Session.getDefaultInstance(props,    
-				new javax.mail.Authenticator() {    
-			protected PasswordAuthentication getPasswordAuthentication() {    
-				return new PasswordAuthentication("dataeconomyportal","Admin@123");  
-			}    
-		});    
+		Session session = Session.getDefaultInstance(props);
+		MimeMessage msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress("chiranjeevi.pasunuri@thinkartha.com","chiranjeevi.pasunuri@thinkartha.com"));
+		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+		msg.setSubject(subject);
+		msg.setContent(message,"text/html");
+		msg.setHeader("X-SES-CONFIGURATION-SET", "ConfigSet");
+		Transport transport = session.getTransport();
 		try {
 			new Thread(new Runnable() {
 
 				public void run() {
 					try {
-						MimeMessage message = new MimeMessage(session);    
-						message.addRecipient(Message.RecipientType.TO,new InternetAddress(email));    
-						message.setSubject(subject);    
-						message.setContent(msg,"text/html"); 
-						Transport.send(message);  
+						transport.connect("smtp.gmail.com", "chiranjeevi.pasunuri@thinkartha.com", "charan@111");
+						transport.sendMessage(msg, msg.getAllRecipients());
 						System.out.println("Email sent!");
 					} catch (AddressException e) {
 						// TODO Auto-generated catch block
@@ -72,6 +68,7 @@ public class MailUtil {
 		}
 		finally
 		{
+			transport.close();
 		}
 
 	}
@@ -128,7 +125,7 @@ public class MailUtil {
 		message += "</html>";
 		sendMail(message,email,"Data Migration Tool");
 	}
-	//Forgot password
+//Forgot password
 	public static void senForgotPasswordalert(String username,String email,String password) throws Exception
 	{
 		// message contains HTML markups

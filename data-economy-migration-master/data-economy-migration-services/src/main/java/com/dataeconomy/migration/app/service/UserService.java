@@ -49,7 +49,7 @@ public class UserService {
 	}
 
 	public UserDto getUser(String userName) {
-		log.info(" UserService : getUser() ");
+		log.info(" UserService : getUser() "); 
 		try {
 			Optional<DMUUsers> dmuUsersOptional = userRepository.findById(userName);
 			if (dmuUsersOptional.isPresent()) {
