@@ -20,6 +20,9 @@ export class ConnectionComponent implements OnInit {
 
     breadCrumbItems: Array<{}>;
 
+    awsToS3ConnectionFlag: boolean = false;
+    hdfsConnectionFlag: boolean = false;
+
     constructor(
         private appService: AppService,
         private notificationService: NotificationService
@@ -85,28 +88,76 @@ export class ConnectionComponent implements OnInit {
         this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'Settings', active: true }, { label: 'Connection', active: true }];
     }
 
-    cancelConnection(connectionGroup) {
-
-    }
-
-    testConnection(connectionGroup: CONNECTION_GROUP) {
+    cancelConnection(connectionGroup: CONNECTION_GROUP) {
         switch (connectionGroup) {
             case CONNECTION_GROUP.AWS_TO_S3:
-                this.appService.testConnection(this.connectionModel).subscribe((res) => {
-                    this.notificationService.showSuccess('Test connection successfull');
-                }, (error) => {
-                    this.notificationService.showError('System Temporarly Unavailable . Please try again');
-                });
                 break;
-
+            case CONNECTION_GROUP.HDFS:
+                break;
+            case CONNECTION_GROUP.TARGET_FILE_PROPS:
+                break;
+            case CONNECTION_GROUP.OTHER_PROPS:
+                break;
             default:
                 break;
         }
     }
 
-    saveConnection(connectionGroup) {
-
+    validateConnectionDetails(connectionGroup: CONNECTION_GROUP) {
+        let isConnectionValid = false;
+        switch (connectionGroup) {
+            case CONNECTION_GROUP.AWS_TO_S3:
+                isConnectionValid = true;
+                break;
+            case CONNECTION_GROUP.HDFS:
+                isConnectionValid = true;
+                break;
+            case CONNECTION_GROUP.TARGET_FILE_PROPS:
+                isConnectionValid = true;
+                break;
+            case CONNECTION_GROUP.OTHER_PROPS:
+                isConnectionValid = true;
+                break;
+            default:
+                isConnectionValid = false;
+                break;
+        }
+        return isConnectionValid;
     }
 
+    markConnectionFlag(connectionGroup: CONNECTION_GROUP, status) {
+        switch (connectionGroup) {
+            case CONNECTION_GROUP.AWS_TO_S3:
+                this.awsToS3ConnectionFlag = status;
+                break;
+            case CONNECTION_GROUP.HDFS:
+                this.hdfsConnectionFlag = status;
+                break;
+            default:
+                break;
+        }
+    }
+
+    testConnection(connectionGroup: CONNECTION_GROUP) {
+        if (this.validateConnectionDetails(connectionGroup)) {
+            this.appService.testConnection(this.connectionModel).subscribe((res) => {
+                this.markConnectionFlag(connectionGroup, true);
+                this.notificationService.showSuccess('Test connection successfull');
+            }, (error) => {
+                this.markConnectionFlag(connectionGroup, false);
+                this.notificationService.showError(error || 'System Temporarly Unavailable . Please try again');
+            });
+        }
+    }
+
+    saveConnection(connectionGroup) {
+        if (this.validateConnectionDetails(connectionGroup)) {
+            this.appService.saveConnection(this.connectionModel).subscribe((res) => {
+                this.notificationService.showSuccess('Connection saved successfull');
+            }, (error) => {
+                this.notificationService.showError(error || 'System Temporarly Unavailable . Please try again');
+            });
+        }
+    }
 
 }
