@@ -48,18 +48,21 @@ public class UserController {
 	public boolean purgeUsers(@RequestParam("userId") String userId) {
 		return userService.purgeUsers(userId);
 	}
+
 	@GetMapping("/login")
-	public DMUUsers login(@RequestParam("userName") String userName,@RequestParam("password") String password) {
-		System.out.println("**userName***"+userName+"password***"+password);
-		return userService.login(userName,Base64.getEncoder().encodeToString(password.getBytes()));
+	public DMUUsers login(@RequestParam("userName") String userName, @RequestParam("password") String password) {
+		System.out.println("**userName***" + userName + "password***" + password);
+		return userService.login(userName, Base64.getEncoder().encodeToString(password.getBytes()));
 	}
+
 	@GetMapping("/resetPassword")
-	public boolean resetPassword(@RequestParam("id") String userId,@RequestParam("password") String password) {
-		System.out.println("**userName***"+userId+"password***"+userId);
-		return userService.resetPassword(userId,Base64.getEncoder().encodeToString(password.getBytes()));
+	public boolean resetPassword(@RequestParam("id") String userId, @RequestParam("password") String password) {
+		System.out.println("**userName***" + userId + "password***" + userId);
+		return userService.resetPassword(userId, Base64.getEncoder().encodeToString(password.getBytes()));
 	}
+
 	@GetMapping("/forgotPassword")
-	public boolean forgotPassword(@RequestParam("userName") String userName,@RequestParam("emailid") String emailid) {
-		return userService.forgotPassword(userName,emailid);
+	public boolean forgotPassword(@RequestParam("userName") String userName, @RequestParam("emailid") String emailid) {
+		return userService.forgotPassword(userName, emailid);
 	}
 }
