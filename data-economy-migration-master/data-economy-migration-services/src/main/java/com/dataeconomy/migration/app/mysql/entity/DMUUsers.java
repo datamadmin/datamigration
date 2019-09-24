@@ -44,7 +44,7 @@ public class DMUUsers {
 	@Column(name = "updateddate")
 	private LocalDateTime updatedDate;
 	@Transient
-	private String tokenization;
+	private Boolean tokenization;
 	@Transient
 	private Integer basketCount;
 }
