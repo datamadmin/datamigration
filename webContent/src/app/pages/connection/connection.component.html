@@ -227,10 +227,10 @@
                                             <div class="form-group row">
                                                 <p-checkbox name="hiveDirectConnection" binary="true"
                                                     label="Hive Direct Connection"
-                                                    [(ngModel)]="connectionModel.isHiveConnEnabled">
+                                                    [(ngModel)]="connectionModel.hiveConnEnabled">
                                                 </p-checkbox>
                                             </div>
-                                            <ng-template [ngIf]="connectionModel.isHiveConnEnabled">
+                                            <ng-template [ngIf]="connectionModel.hiveConnEnabled">
                                                 <div class="form-group row">
                                                     <label for="hiveHostName" class="col-sm-2 col-form-label">Hive Host
                                                         Name
@@ -252,10 +252,10 @@
                                             <div class="form-group row">
                                                 <p-checkbox name="hiveUsingImpalaConnection" binary="true"
                                                     label="Hive Using Impala Connection"
-                                                    [(ngModel)]="connectionModel.isImpalaConnEnabled">
+                                                    [(ngModel)]="connectionModel.impalaConnEnabled">
                                                 </p-checkbox>
                                             </div>
-                                            <ng-template [ngIf]="connectionModel.isImpalaConnEnabled">
+                                            <ng-template [ngIf]="connectionModel.impalaConnEnabled">
                                                 <div class="form-group row">
                                                     <label for="impalaHostName" class="col-sm-2 col-form-label">Impala
                                                         Host
@@ -279,10 +279,10 @@
                                             <div class="form-group row">
                                                 <p-checkbox name="sparkOnHiveConnection" binary="true"
                                                     label="Spark on Hive Connection"
-                                                    [(ngModel)]="connectionModel.isSparkConnEnabled">
+                                                    [(ngModel)]="connectionModel.sparkConnEnabled">
                                                 </p-checkbox>
                                             </div>
-                                            <ng-template [ngIf]="connectionModel.isSparkConnEnabled">
+                                            <ng-template [ngIf]="connectionModel.sparkConnEnabled">
                                                 <div class="form-group row">
                                                     <label for="sqlWhDir" class="col-sm-2 col-form-label">SQL Warehouse
                                                         Dir

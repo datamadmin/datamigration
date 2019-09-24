@@ -54,9 +54,9 @@ export class ConnectionComponent implements OnInit {
         "ldapUserPassw": "",
         "ldapDomain": "",
         "scCrdntlAccessType": SC_CREDENTIALS_ACCESS_TYPE.ASSUME,
-        "isHiveConnEnabled": false,
-        "isImpalaConnEnabled": false,
-        "isSparkConnEnabled": false,
+        "hiveConnEnabled": false,
+        "impalaConnEnabled": false,
+        "sparkConnEnabled": false,
         "hiveHostName": "",
         "hivePortNmbr": "",
         "impalaHostName": "",
@@ -202,15 +202,11 @@ export class ConnectionComponent implements OnInit {
                     }
                 }
             }
-            else {
-                this.notificationService.showError("Please select atleast one Connection type");
-                return false;
-            }
         }
 
         else if (connectionGroup === CONNECTION_GROUP.HDFS) {
-            if (this.connectionModel.isHiveConnEnabled || this.connectionModel.isImpalaConnEnabled || this.connectionModel.isSparkConnEnabled) {
-                if (this.connectionModel.isHiveConnEnabled) {
+            if (this.connectionModel.hiveConnEnabled || this.connectionModel.impalaConnEnabled || this.connectionModel.sparkConnEnabled) {
+                if (this.connectionModel.hiveConnEnabled) {
                     if (this.connectionModel.hiveHostName.length < 1) {
                         this.notificationService.showError("Hive Host Name is mandatory");
                         return false;
@@ -221,7 +217,7 @@ export class ConnectionComponent implements OnInit {
                     }
                 }
 
-                if (this.connectionModel.isImpalaConnEnabled) {
+                if (this.connectionModel.impalaConnEnabled) {
                     if (this.connectionModel.impalaHostName.length < 1) {
                         this.notificationService.showError("Impala Host Name is mandatory");
                         return false;
@@ -232,7 +228,7 @@ export class ConnectionComponent implements OnInit {
                     }
                 }
 
-                if (this.connectionModel.isSparkConnEnabled) {
+                if (this.connectionModel.sparkConnEnabled) {
                     if (this.connectionModel.sqlWhDir.length < 1) {
                         this.notificationService.showError("SQL Warehouse Dir is mandatory");
                         return false;
