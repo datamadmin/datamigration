@@ -42,4 +42,6 @@ public class DMUUsers {
 	private String updatedBy;
 	@Column(name = "updateddate")
 	private LocalDateTime updatedDate;
+	@Column(name = "tokenization")
+	private String tokenization;
 }

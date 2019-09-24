@@ -22,5 +22,6 @@ public class UserDto {
 	private LocalDateTime createdDate;
 	private String updatedBy;
 	private LocalDateTime updatedDate;
+	private String tokenization;
 
 }
