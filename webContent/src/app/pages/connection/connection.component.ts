@@ -93,7 +93,18 @@ export class ConnectionComponent implements OnInit {
     ngOnInit() {
         this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'Settings', active: true }, { label: 'Connection', active: true }];
         this.isAdmin = this.authenticationService.currentUser()["userRole"] === 'Admin' ? true : false;
+        this.getConnectionInfo();
     }
+
+    getConnectionInfo() {
+        this.appService.getConnectionDetails().subscribe(
+            (res: any) => {
+                this.connectionModel = res;
+            },
+            (error) => {
+                this.notificationService.showError(error || "System Temporarly unavailable");
+            });
+    };
 
     cancelConnection(connectionGroup: CONNECTION_GROUP) {
         switch (connectionGroup) {

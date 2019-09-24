@@ -28,10 +28,10 @@ export class AppService {
     }
 
     deleteUser(userId: any) {
-	 const params = {
+        const params = {
             "userId": userId
-			}
-        return this.http.get(`${environment.apiUrl}/users/delete`,{ params });
+        }
+        return this.http.get(`${environment.apiUrl}/users/delete`, { params });
     }
 
     resetPassword(password: any) {
@@ -84,6 +84,10 @@ export class AppService {
 
     saveConnection(connectionModel: any) {
         return this.http.post(`${environment.apiUrl}/connection/save`, connectionModel);
+    }
+
+    getConnectionDetails() {
+        return this.http.get(`${environment.apiUrl}/connection/get`);
     }
 
 }
