@@ -202,6 +202,10 @@ export class ConnectionComponent implements OnInit {
                     }
                 }
             }
+            else {
+                this.notificationService.showError("Please select atleast one Connection type");
+                return false;
+            }
         }
 
         else if (connectionGroup === CONNECTION_GROUP.HDFS) {
