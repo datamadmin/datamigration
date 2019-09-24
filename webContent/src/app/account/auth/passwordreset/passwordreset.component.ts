@@ -62,7 +62,7 @@ export class PasswordresetComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.notificationService.showError(error.message || 'Error while processing the request');
+          this.notificationService.showError(error || 'Error while processing the request');
           this.loading = false;
         });
   }

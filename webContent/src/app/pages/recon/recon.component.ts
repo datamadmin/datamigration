@@ -92,7 +92,7 @@ export class ReconComponent implements OnInit {
         this.masterList = res;
       },
       (error) => {
-        this.notificationService.showError(error.message || "System Temporarly unavailable");
+        this.notificationService.showError(error || "System Temporarly unavailable");
       });
   }
 
@@ -106,7 +106,7 @@ export class ReconComponent implements OnInit {
         this.showDetail = true;
       },
       (error) => {
-        this.notificationService.showError(error.message || "System Temporarly unavailable");
+        this.notificationService.showError(error ||  "System Temporarly unavailable");
       });
   }
 

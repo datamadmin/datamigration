@@ -93,7 +93,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                 this.masterList = res;
             },
             (error) => {
-                this.notificationService.showError(error.message || "System Temporarly unavailable");
+                this.notificationService.showError(error || "System Temporarly unavailable");
             });
     }
 
@@ -111,7 +111,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                 this.showDetail = true;
             },
             (error) => {
-                this.notificationService.showError(error.message || "System Temporarly unavailable");
+                this.notificationService.showError(error ||  "System Temporarly unavailable");
             });
     }
 

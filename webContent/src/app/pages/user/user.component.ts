@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
         id: null,
         userName: "",
         emailid: "",
-        userRole: ""
+        userRole: "Admin"
     };
 
     constructor(
@@ -65,7 +65,7 @@ export class UserComponent implements OnInit {
             id: null,
             userName: "",
             emailid: "",
-            userRole: ""
+            userRole: "Admin"
         };
     }
 
@@ -102,7 +102,7 @@ export class UserComponent implements OnInit {
             },
             (error) => {
                 console.log(error);
-                this.notificationService.showError(error.message || "Error while deleting user");
+                this.notificationService.showError(error ||  "Error while deleting user");
             });
     }
 
@@ -133,7 +133,7 @@ export class UserComponent implements OnInit {
                 },
                 (error) => {
                     this.isAdd = true;
-                    this.notificationService.showError(error.message || "Error while creating user");
+                    this.notificationService.showError(error ||  "Error while creating user");
                 });
         }
 
@@ -149,7 +149,7 @@ export class UserComponent implements OnInit {
                 },
                 (error) => {
                     this.isUpdate = true;
-                    this.notificationService.showError(error.message || "Error while updating user information");
+                    this.notificationService.showError(error ||  "Error while updating user information");
                 });
         }
     }

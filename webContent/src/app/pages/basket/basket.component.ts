@@ -74,7 +74,7 @@ export class BasketComponent implements OnInit {
                 }, 10);
             },
             (error) => {
-                this.notificationService.showError(error.message || "System Temporarly unavailable");
+                this.notificationService.showError(error || "System Temporarly unavailable");
             });
     }
 }

@@ -27,7 +27,7 @@ export class AuthenticationService {
 
     setUser(user: any) {
         this.user = user;
-        this.cookieService.setCookie('currentUser', JSON.stringify(user), 15);
+        this.cookieService.setCookie('currentUser', JSON.stringify(user), 30);
     }
 
     /**

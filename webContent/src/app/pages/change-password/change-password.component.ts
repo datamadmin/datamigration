@@ -65,7 +65,7 @@ export class ChangePasswordComponent implements OnInit {
                         }
                     },
                     error => {
-                        this.notificationService.showError(error.message || 'Error while changing the password');
+                        this.notificationService.showError(error || 'Error while changing the password');
                     });
         }
     }

@@ -9,7 +9,7 @@
                             <p-tabPanel header="AWS S3">
                                 <div class="ui-g">
                                     <div class="ui-g-12">
-                                        <form>
+                                        <form autocomplete="off">
                                             <div class="form-group row">
                                                 <p-radioButton name="connectionType" value="DIRECT HDFS"
                                                     label="AWS Access Credentials included in HDFS Site"
@@ -223,7 +223,7 @@
                             <p-tabPanel header="HDFS">
                                 <div class="ui-g">
                                     <div class="ui-g-12">
-                                        <form>
+                                        <form autocomplete="off">
                                             <div class="form-group row">
                                                 <p-checkbox name="hiveDirectConnection" binary="true"
                                                     label="Hive Direct Connection"
@@ -242,7 +242,7 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="hivePortNmbr" class="col-sm-2 col-form-label">Hive Port
-                                                        Name</label>
+                                                        Number</label>
                                                     <div class="col-sm-4">
                                                         <input type="text" [(ngModel)]="connectionModel.hivePortNmbr"
                                                             name="hivePortNmbr" pInputText class="form-control">
@@ -269,7 +269,7 @@
                                                 <div class="form-group row">
                                                     <label for="impalaPortNmbr" class="col-sm-2 col-form-label">Impala
                                                         Port
-                                                        Name</label>
+                                                        Number</label>
                                                     <div class="col-sm-4">
                                                         <input type="text" [(ngModel)]="connectionModel.impalaPortNmbr"
                                                             name="impalaPortNmbr" pInputText class="form-control">
@@ -308,20 +308,20 @@
                                                 <h5>Authentication Type</h5>
                                             </div>
                                             <div class="form-group row">
-                                                <p-radioButton name="authenticationType" value="Un Secured"
+                                                <p-radioButton name="authenticationType" value="UNSCRD"
                                                     label="Unsecured Connection"
                                                     [(ngModel)]="connectionModel.authenticationType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
-                                                <p-radioButton name="authenticationType" value="Secured"
+                                                <p-radioButton name="authenticationType" value="SCRD"
                                                     label="Secured Connection"
                                                     [(ngModel)]="connectionModel.authenticationType">
                                                 </p-radioButton>
                                             </div>
 
                                             <div class="form-group row pl-4"
-                                                *ngIf="connectionModel.authenticationType=='Secured'">
+                                                *ngIf="connectionModel.authenticationType=='SCRD'">
                                                 <p-radioButton name="credentialStrgType" value="LDAP"
                                                     label="LDAP Connection"
                                                     [(ngModel)]="connectionModel.credentialStrgType">
@@ -360,7 +360,7 @@
                                             </ng-template>
 
                                             <div class="form-group row  pl-4"
-                                                *ngIf="connectionModel.authenticationType=='Secured'">
+                                                *ngIf="connectionModel.authenticationType=='SCRD'">
                                                 <p-radioButton name="credentialStrgType" value="KERBEROS"
                                                     label="Kerberos" [(ngModel)]="connectionModel.credentialStrgType">
                                                 </p-radioButton>
@@ -434,30 +434,31 @@
                             <p-tabPanel header="Target File Properties">
                                 <div class="ui-g">
                                     <div class="ui-g-12">
-                                        <form>
+                                        <form autocomplete="off">
                                             <div class="form-group row">
                                                 <h5>Target Format Properties</h5>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="formatType" value="SOURCE"
                                                     label="Same as Source Format"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.formatType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.formatType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="formatType" value="TEXT" label="Text Format"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.formatType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.formatType">
                                                 </p-radioButton>
                                             </div>
 
-                                            <ng-template [ngIf]="connectionModel.tgtFormatPropDto.formatType=='TEXT'">
+                                            <ng-template
+                                                [ngIf]="connectionModel.tgtFormatPropTempDto.formatType=='TEXT'">
                                                 <div class="form-group row">
                                                     <label for="fieldDelimiter" class="col-sm-2 col-form-label">Field
                                                         Delimiter
                                                     </label>
                                                     <div class="col-sm-4">
                                                         <input type="text"
-                                                            [(ngModel)]="connectionModel.tgtFormatPropDto.fieldDelimiter"
+                                                            [(ngModel)]="connectionModel.tgtFormatPropTempDto.fieldDelimiter"
                                                             name="fieldDelimiter" pInputText class="form-control">
                                                     </div>
                                                 </div>
@@ -466,28 +467,28 @@
                                             <div class="form-group row">
                                                 <p-radioButton name="formatType" value="SEQUENCE"
                                                     label="Sequence Format"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.formatType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.formatType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="formatType" value="RECORD_COLUMNAR"
                                                     label="RC (Record Columnar) Format"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.formatType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.formatType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="formatType" value="AVRO" label="Avro Format"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.formatType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.formatType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="formatType" value="ORC" label="ORC Format"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.formatType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.formatType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="formatType" value="PARQUET" label="Parquet Format"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.formatType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.formatType">
                                                 </p-radioButton>
                                             </div>
 
@@ -497,19 +498,19 @@
                                             <div class="form-group row">
                                                 <p-radioButton name="compressionType" value="SOURCE"
                                                     label="Same as source File compression"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.compressionType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.compressionType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="compressionType" value="UN_COMPRESSED"
                                                     label="Uncompressed"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.compressionType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.compressionType">
                                                 </p-radioButton>
                                             </div>
                                             <div class="form-group row">
                                                 <p-radioButton name="compressionType" value="GZIP"
                                                     label="GZIP Compression"
-                                                    [(ngModel)]="connectionModel.tgtFormatPropDto.compressionType">
+                                                    [(ngModel)]="connectionModel.tgtFormatPropTempDto.compressionType">
                                                 </p-radioButton>
                                             </div>
 
@@ -533,7 +534,7 @@
                             <p-tabPanel header="Other Properties">
                                 <div class="ui-g">
                                     <div class="ui-g-12">
-                                        <form>
+                                        <form autocomplete="off">
                                             <div class="form-group row">
                                                 <h5>Parallelism</h5>
                                             </div>
