@@ -210,7 +210,16 @@ export class RequestComponent implements OnInit {
     }
 
     cancelConnection() {
-
+        this.requestModel = {
+            "labelName": "",
+            "requestType": null, // HIVE TO S3 ,
+            "migrationType": null,
+            "schemaName": null,
+            "migartionFileList": [],
+            "tknztnEnabled": YES_OR_NO_OPTIONS.NO,  // Y /N,
+            'targetS3Bucket': "",
+            "tokenizationFileList": [],
+        }
     }
 
     onContinueFunction() {
