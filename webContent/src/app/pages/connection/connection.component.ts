@@ -244,43 +244,50 @@ export class ConnectionComponent implements OnInit {
                 return false;
             }
 
-
-            if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.LDAP || this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.KERBEROS) {
-                if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.LDAP) {
-                    if (this.connectionModel.ldapUserName.length < 1) {
-                        this.notificationService.showError("LDAP User Name is mandatory");
-                        return false;
+            if (this.connectionModel.authenticationType === AUTHENTICATION_TYPE.UNSECURED || this.connectionModel.authenticationType === AUTHENTICATION_TYPE.SECURED) {
+                if (this.connectionModel.authenticationType == AUTHENTICATION_TYPE.SECURED) {
+                    if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.LDAP || this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.KERBEROS) {
+                        if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.LDAP) {
+                            if (this.connectionModel.ldapUserName.length < 1) {
+                                this.notificationService.showError("LDAP User Name is mandatory");
+                                return false;
+                            }
+                            else if (this.connectionModel.ldapUserPassw.length < 1) {
+                                this.notificationService.showError("LDAP Password URI is mandatory");
+                                return false;
+                            }
+                            else if (this.connectionModel.ldapDomain.length < 1) {
+                                this.notificationService.showError("LDAP Domain is mandatory");
+                                return false;
+                            }
+                        }
+                        else if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.KERBEROS) {
+                            if (this.connectionModel.kerberosHostRealm.length < 1) {
+                                this.notificationService.showError("Host Realm is mandatory");
+                                return false;
+                            }
+                            else if (this.connectionModel.kerberosHostFqdn.length < 1) {
+                                this.notificationService.showError("Host FQDN is mandatory");
+                                return false;
+                            }
+                            else if (this.connectionModel.kerberosServiceName.length < 1) {
+                                this.notificationService.showError("Service Name is mandatory");
+                                return false;
+                            }
+                            else if (this.connectionModel.sslKeystorePath.length < 1) {
+                                this.notificationService.showError("SSL Keystore Path is mandatory");
+                                return false;
+                            }
+                        }
                     }
-                    else if (this.connectionModel.ldapUserPassw.length < 1) {
-                        this.notificationService.showError("LDAP Password URI is mandatory");
-                        return false;
-                    }
-                    else if (this.connectionModel.ldapDomain.length < 1) {
-                        this.notificationService.showError("LDAP Domain is mandatory");
-                        return false;
-                    }
-                }
-                else if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.KERBEROS) {
-                    if (this.connectionModel.kerberosHostRealm.length < 1) {
-                        this.notificationService.showError("Host Realm is mandatory");
-                        return false;
-                    }
-                    else if (this.connectionModel.kerberosHostFqdn.length < 1) {
-                        this.notificationService.showError("Host FQDN is mandatory");
-                        return false;
-                    }
-                    else if (this.connectionModel.kerberosServiceName.length < 1) {
-                        this.notificationService.showError("Service Name is mandatory");
-                        return false;
-                    }
-                    else if (this.connectionModel.sslKeystorePath.length < 1) {
-                        this.notificationService.showError("SSL Keystore Path is mandatory");
+                    else {
+                        this.notificationService.showError("Please select authentication storage type");
                         return false;
                     }
                 }
             }
             else {
-                this.notificationService.showError("Please select authentication storage type");
+                this.notificationService.showError("Please select authentication type");
                 return false;
             }
         }
