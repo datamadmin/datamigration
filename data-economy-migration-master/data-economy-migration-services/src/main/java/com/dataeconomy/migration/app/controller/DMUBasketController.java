@@ -26,14 +26,25 @@ public class DMUBasketController {
 	DMUBasketService dmuBasketService;
 
 	@GetMapping("/all")
-	public List<DMUBasketDto> getConnectionDetails() {
+	public List<DMUBasketDto> getAllBasketDetails() {
 		return dmuBasketService.getAllBasketDetails();
 	}
 
 	@PostMapping("/save")
-	public boolean saveBasketDetails(@RequestBody List<DMUBasketDto> dmuBasketDtoList,
+	public boolean saveBasketDetailsTemp(@RequestBody List<DMUBasketDto> dmuBasketDtoList,
 			@RequestHeader("userId") String userId) throws DataMigrationException {
 		return dmuBasketService.saveBasketDetails(dmuBasketDtoList, userId);
+	}
+
+	@PostMapping("/save/purge")
+	public boolean saveBasketDetailsAndPurge(@RequestBody List<DMUBasketDto> dmuBasketDtoList,
+			@RequestHeader("userId") String userId) throws DataMigrationException {
+		return dmuBasketService.saveBasketDetails(dmuBasketDtoList, userId);
+	}
+
+	@GetMapping("/clear")
+	public boolean clearBasketDetails(@RequestHeader("userId") String userId) throws DataMigrationException {
+		return dmuBasketService.clearBasketDetails(userId);
 	}
 
 	@GetMapping("/all/{userId}")

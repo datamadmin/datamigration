@@ -2,31 +2,26 @@ package com.dataeconomy.migration.app.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dataeconomy.migration.app.connection.HDFSConnectionService;
 import com.dataeconomy.migration.app.exception.DataMigrationException;
 import com.dataeconomy.migration.app.model.DMUBasketDto;
 import com.dataeconomy.migration.app.mysql.entity.DMUBasketTemp;
-import com.dataeconomy.migration.app.mysql.entity.DMUHIstoryDetailPK;
-import com.dataeconomy.migration.app.mysql.entity.DMUHistoryDetail;
 import com.dataeconomy.migration.app.mysql.entity.DMUPtgyPK;
 import com.dataeconomy.migration.app.mysql.entity.DMUPtgyTemp;
-import com.dataeconomy.migration.app.mysql.entity.DMUReconDetail;
-import com.dataeconomy.migration.app.mysql.entity.DMUReconMain;
 import com.dataeconomy.migration.app.mysql.repository.BasketTempRepository;
 import com.dataeconomy.migration.app.mysql.repository.DMUPgtyRepository;
 import com.dataeconomy.migration.app.mysql.repository.DMUPtgyTempRepository;
@@ -36,7 +31,10 @@ import com.dataeconomy.migration.app.mysql.repository.HistoryDetailRepository;
 import com.dataeconomy.migration.app.util.Constants;
 import com.google.common.collect.Lists;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class DMUBasketService {
 
 	@Autowired
@@ -78,7 +76,7 @@ public class DMUBasketService {
 
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class)
 	public synchronized boolean saveBasketDetails(List<DMUBasketDto> dmuBasketDtoList, String userName)
 			throws DataMigrationException {
 		try {
@@ -98,35 +96,11 @@ public class DMUBasketService {
 										.labelName(dmuBasketDto.getLabelName()).build())
 								.tknztnEnabled(dmuBasketDto.isTknztnEnabled() ? Constants.YES : Constants.NO)
 								.tknztnFilePath(dmuBasketDto.getTknztnFilePath()).build());
-
-						reconMainRepository.save(DMUReconMain.builder().userId(dmuBasketDto.getUserId())
-								.status(Constants.NOT_STARTED).requestType(dmuBasketDto.getRequestType())
-								.requestNo(dmuBasketDto.getLabelName()).build());
-
-						historyDetailRepository.save(DMUHistoryDetail.builder()
-								.dmuHIstoryDetailPK(DMUHIstoryDetailPK.builder().srNo(dmuBasketDto.getSrNo())
-										.requestNo(dmuBasketDto.getLabelName() + LocalDate.now()).build())
-								.schemaName(dmuBasketDto.getSchemaName()).tableName(dmuBasketDto.getTableName())
-								.filterCondition(dmuBasketDto.getFilterCondition())
-								.targetS3Bucket(dmuBasketDto.getTargetS3Bucket())
-								.incrementalFlag(dmuBasketDto.getIncrementalFlag())
-								.incrementalClmn(dmuBasketDto.getIncrementalClmn()).status(Constants.SUBMITTED)
-								.build());
-
-						dmuReconDetailRepository.save(DMUReconDetail.builder()
-								.dmuHIstoryDetailPK(DMUHIstoryDetailPK.builder().srNo(dmuBasketDto.getSrNo())
-										.requestNo(dmuBasketDto.getLabelName() + LocalDate.now()).build())
-								.schemaName(dmuBasketDto.getSchemaName()).tableName(dmuBasketDto.getTableName())
-								.filterCondition(dmuBasketDto.getFilterCondition())
-								.targetS3Bucket(dmuBasketDto.getTargetS3Bucket())
-								.incrementalFlag(dmuBasketDto.getIncrementalFlag())
-								.incrementalColumn(dmuBasketDto.getIncrementalClmn()).status(Constants.NOT_STARTED)
-								.build());
 					});
-			basketTempRepository.deleteById(userName);
-			dmuPtgyRepository.deleteByRequestedUserName(userName);
 			return true;
-		} catch (Exception e) {
+		} catch (Exception exception) {
+			log.info(" Exception occured at DMUBasketService :: saveBasketDetails {} ",
+					ExceptionUtils.getStackTrace(exception));
 			throw new DataMigrationException("Unable to persist basket details to database ");
 		}
 
@@ -191,6 +165,16 @@ public class DMUBasketService {
 			throw new DataMigrationException("Unable to delete basket details ");
 		}
 
+	}
+
+	public boolean clearBasketDetails(String userName) throws DataMigrationException {
+		try {
+			basketTempRepository.deleteById(userName);
+			dmuPtgyRepository.deleteByRequestedUserName(userName);
+			return true;
+		} catch (Exception exception) {
+			throw new DataMigrationException("Unable to clear basket details ");
+		}
 	}
 
 }
