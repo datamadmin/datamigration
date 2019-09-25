@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppService } from 'src/app/core/services/app.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 // import * as Highcharts from 'highcharts';
 // require('highcharts/highcharts-3d.js')(Highcharts);
@@ -21,7 +23,11 @@ export class HomeComponent implements OnInit {
   requestStatusChartConfig: any;
   reconStatusChartConfig: any;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private appService: AppService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit() {
     this.requestStatusChartConfig = {
@@ -68,7 +74,7 @@ export class HomeComponent implements OnInit {
           this.contentClicked('request', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Complete", "Error"]
+      labels: ["Not Started", "In Progress", "Completed", "Error"]
     };
 
     this.reconStatusChartConfig = {
@@ -115,7 +121,7 @@ export class HomeComponent implements OnInit {
           this.contentClicked('recon', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Complete", "Error"]
+      labels: ["Not Started", "In Progress", "Completed", "Error"]
     };
 
     this.fetchChartData();
@@ -126,6 +132,7 @@ export class HomeComponent implements OnInit {
    */
   contentRefresh() {
     console.log('Data refresh requested');
+    this.fetchChartData();
   }
 
   contentClicked(requestType, event, chartContext, config) {
@@ -144,20 +151,25 @@ export class HomeComponent implements OnInit {
    * fetches the dashboard-2 data
    */
   private fetchChartData() {
-    let res = [
-      {
-        "requestStatus": [5, 30, 20, 10],
-        "reconStatus": [5, 30, 20, 5]
-      }
-    ];
+    this.appService.getHomeScreenData().subscribe(
+      (res) => {
+        this.chartData = [];
+        let propList = ["Not Started", "In Progress", "Completed", "Error"];
+        let requestStatus = [];
+        let reconStatus = [];
 
-    res.forEach(ele => {
-      let requestStatus = Object.assign({}, this.requestStatusChartConfig, { "series": ele["requestStatus"] });
-      let reconStatus = Object.assign({}, this.reconStatusChartConfig, { "series": ele["reconStatus"] });
-      this.chartData.push({
-        "requestStatus": requestStatus,
-        "reconStatus": reconStatus
+        propList.forEach((prop) => {
+          requestStatus.push(Math.round(res["reconMainCount"].hasOwnProperty(prop) ? (res["reconMainCount"][prop] / res["reconMainTotalCount"]) * 100 : 0));
+          reconStatus.push(Math.round(res["reconHistoryMainCount"].hasOwnProperty(prop) ? (res["reconHistoryMainCount"][prop] / res["reconHistoryMainTotalCount"]) * 100 : 0));
+        });
+        this.chartData.push({
+          "requestStatus": Object.assign({}, this.requestStatusChartConfig, { "series": requestStatus }),
+          "reconStatus": Object.assign({}, this.reconStatusChartConfig, { "series": reconStatus })
+        });
+      },
+      (error) => {
+        console.log(error);
+        this.notificationService.showError(error || "Error while fetching the info");
       });
-    });
   };
 }

@@ -6,7 +6,7 @@ export const enum CONNECTION_GROUP {
 }
 
 export const enum CONNECTION_TYPE {
-    DIRECT_HDFS = "DIRECT HDFS",
+    DIRECT_HDFS = "DIRHDFS",
     DIRECT_LC = "DIRECT LC",
     DIRECT_SC = "DIRECT SC"
 }
@@ -19,7 +19,7 @@ export const enum SC_CREDENTIALS_ACCESS_TYPE {
 
 export enum AUTHENTICATION_TYPE {
     UNSECURED = "UNSCRD",
-    SECURED = "SCD"
+    SECURED = "SCRD"
 }
 
 export enum CREDENTIAL_STORAGE_TYPE {

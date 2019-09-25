@@ -4,6 +4,7 @@ import 'rxjs/add/operator/filter';
 import { Table } from 'primeng/table';
 import { AppService } from 'src/app/core/services/app.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { AuthenticationService } from 'src/app/core/services/auth.service';
 
 @Component({
     selector: 'app-history',
@@ -29,12 +30,15 @@ export class HistoryComponent implements OnInit, AfterViewInit {
 
     filterParams: any = {};
 
+    isTokenizationEnabled: boolean = false;
+
     @ViewChild("masterTable", { static: false }) masterTable: Table;
 
     constructor(
         private route: ActivatedRoute,
         private appService: AppService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private authenticationService: AuthenticationService
     ) { }
 
     ngAfterViewInit() {
@@ -42,6 +46,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+        this.isTokenizationEnabled = this.authenticationService.isTokenizationEnabled();
         // tslint:disable-next-line: max-line-length
         this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'History', active: true }];
 
@@ -54,12 +59,15 @@ export class HistoryComponent implements OnInit, AfterViewInit {
             { field: 'requestNo', header: 'Request No' },
             { field: 'userId', header: 'Requested By' },
             { field: 'requestedTime', header: 'Requested Time' },
-            { field: 'tknztnEnabled', header: 'Tokenization Enabled' },
             { field: 'status', header: 'Recon Status' },
             { field: 'requestType', header: 'Request Type' },
             { field: 'scriptGenCmpltTime', header: 'Script Generation Completed Time' },
             { field: 'exctnCmpltTime', header: 'Execution Completed Time' }
         ];
+
+        if (this.isTokenizationEnabled) {
+            this.masterCols.push({ field: 'tknztnEnabled', header: 'Tokenization Enabled' })
+        }
 
         this.detailCols = [
             { field: 'srNo', header: 'Sr.No' },
@@ -111,7 +119,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
                 this.showDetail = true;
             },
             (error) => {
-                this.notificationService.showError(error ||  "System Temporarly unavailable");
+                this.notificationService.showError(error || "System Temporarly unavailable");
             });
     }
 
@@ -121,17 +129,5 @@ export class HistoryComponent implements OnInit, AfterViewInit {
         this.showDetail = false;
         this.detailList = [];
         this._fetchData();
-    }
-
-    onDetailsSubmitFunction() {
-
-    }
-
-    onSubmitFunction() {
-
-    }
-
-    onCancelFunction() {
-
     }
 }

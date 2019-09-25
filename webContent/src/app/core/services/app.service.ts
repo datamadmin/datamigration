@@ -4,6 +4,7 @@ import { CookieService } from '../services/cookie.service';
 
 import { environment } from 'src/environments/environment';
 import { AuthenticationService } from './auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
@@ -13,11 +14,16 @@ export class AppService {
         private authenticationService: AuthenticationService
     ) { }
 
-    private getCurrentUserId(): any {
+    getCurrentUserId(): any {
         let currentUserId = this.authenticationService.currentUser()["id"];
-        console.log(currentUserId);
         return currentUserId;
     }
+
+    requestModel: any;
+    requestPreviewList: any = [];
+    isRequestBackClicked: boolean = false;
+
+    public basketCountSubscription = new BehaviorSubject(0);
 
     addUser(userModel: any) {
         return this.http.post(`${environment.apiUrl}/users/save`, userModel);
@@ -55,7 +61,10 @@ export class AppService {
     }
 
     clearAllBasketItems(): any {
-        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserId()}`);
+        let headers = new HttpHeaders({
+            'userId': this.getCurrentUserId()
+        });
+        return this.http.get(`${environment.apiUrl}/basket/clear`, { headers: headers });
     }
 
     getAllUsers(): any {
@@ -90,4 +99,29 @@ export class AppService {
         return this.http.get(`${environment.apiUrl}/connection/get`);
     }
 
+    getDatabaseNameList() {
+        return this.http.get(`${environment.apiUrl}/request/all`);
+    }
+
+    getRequestPreviewData(requestModel: any) {
+        return this.http.get(`${environment.apiUrl}/request/all/${requestModel.schemaName}`);
+    }
+
+    saveRequestPreviewData(basketList: any) {
+        let headers = new HttpHeaders({
+            'userId': this.getCurrentUserId()
+        });
+        return this.http.post(`${environment.apiUrl}/basket/save`, basketList, { headers: headers });
+    }
+
+    saveBasketData(basketList: any) {
+        let headers = new HttpHeaders({
+            'userId': this.getCurrentUserId()
+        });
+        return this.http.post(`${environment.apiUrl}/basket/save/purge`, basketList, { headers: headers });
+    }
+
+    getHomeScreenData() {
+        return this.http.get(`${environment.apiUrl}/home/status`);
+    }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoaderService } from './core/services/loader.service';
+import { AppService } from './core/services/app.service';
 
 @Component({
   selector: 'app',
@@ -12,13 +13,22 @@ export class AppComponent implements OnInit {
   loadingMessage: String = "";
 
   constructor(
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private appService: AppService
   ) { }
 
   ngOnInit() {
     this.loaderService.isLoading.subscribe((isSpinnerVisible) => {
       this.isSpinnerVisible = isSpinnerVisible;
     });
+
+    this.appService.getAllBasketItems().subscribe(
+      data => {
+        this.appService.basketCountSubscription.next(data.length);
+      },
+      error => {
+        console.log(error);
+      });
   }
 
 }

@@ -51,10 +51,6 @@
                             </p-table>
                         </div>
                     </div>
-                    <div class="float-right">
-                        <button class="btn btn-light mr-2" type="button" (click)="onCancelFunction()">Cancel</button>
-                        <button class="btn  btn-info" type="button" (click)="onSubmitFunction()">Submit</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -64,7 +60,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="float-right">
+                    <div class="float-right" *ngIf="isTokenizationEnabled">
                         <div class="btn-group mb-2">
                             <a class="link text-success" (click)="downloadTokenizationDetails()">Tokenization
                                 Details</a>
@@ -101,10 +97,6 @@
                                 </ng-template>
                             </p-table>
                         </div>
-                    </div>
-                    <div class="float-right">
-                        <button class="btn btn-light mr-2" (click)="cancelDetails()">Cancel</button>
-                        <button class="btn btn-info" (click)="onDetailsSubmitFunction()">Execute</button>
                     </div>
                 </div>
             </div>

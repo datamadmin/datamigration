@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     // get return url from route parameters or default to '/'
     // tslint:disable-next-line: no-string-literal
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'app/home';
+    this.returnUrl = 'app/home';
   }
 
   ngAfterViewInit() {
@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.notificationService.showError(error ||  'Encountered Error while login');
+          this.notificationService.showError(error || 'Encountered Error while login');
           this.loading = false;
         });
   }

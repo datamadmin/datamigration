@@ -121,14 +121,21 @@ export class ConnectionComponent implements OnInit {
         }
     }
 
+    isPropValExists(value) {
+        if (value == null || value == undefined || value.length < 1) {
+            return false;
+        }
+        return true;
+    }
+
     validateConnectionDetails(connectionGroup: CONNECTION_GROUP) {
         if (connectionGroup === CONNECTION_GROUP.AWS_TO_S3) {
             if (this.connectionModel.connectionType === CONNECTION_TYPE.DIRECT_LC) {
-                if (this.connectionModel.awsAccessIdLc.length < 1) {
+                if (!this.isPropValExists(this.connectionModel.awsAccessIdLc)) {
                     this.notificationService.showError("AWS Access ID is mandatory");
                     return false;
                 }
-                else if (this.connectionModel.awsSecretKeyLc.length < 1) {
+                else if (!this.isPropValExists(this.connectionModel.awsSecretKeyLc)) {
                     this.notificationService.showError("AWS Secret Key is mandatory");
                     return false;
                 }
@@ -136,70 +143,74 @@ export class ConnectionComponent implements OnInit {
 
             else if (this.connectionModel.connectionType === CONNECTION_TYPE.DIRECT_SC) {
                 if (this.connectionModel.scCrdntlAccessType === SC_CREDENTIALS_ACCESS_TYPE.ASSUME) {
-                    if (this.connectionModel.awsAccessIdSc.length < 1) {
+                    if (!this.isPropValExists(this.connectionModel.awsAccessIdSc)) {
                         this.notificationService.showError("AWS Access ID is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.awsSecretKeySc.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.awsSecretKeySc)) {
                         this.notificationService.showError("AWS Secret Key is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.roleArn.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.roleArn)) {
                         this.notificationService.showError("Role ARN is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.roleSesnName.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.roleSesnName)) {
                         this.notificationService.showError("Role Session Name is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.inlineSesnPolicy.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.inlineSesnPolicy)) {
                         this.notificationService.showError("Inline Session Policy is mandatory");
                         return false;
                     }
                 }
                 else if (this.connectionModel.scCrdntlAccessType === SC_CREDENTIALS_ACCESS_TYPE.ASSUME_SAML) {
-                    if (this.connectionModel.ldapUserName.length < 1) {
+                    if (!this.isPropValExists(this.connectionModel.ldapUserName)) {
                         this.notificationService.showError("LDAP User Name is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.ldapUserPassw.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.ldapUserPassw)) {
                         this.notificationService.showError("LDAP User Password is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.ldapDomain.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.ldapDomain)) {
                         this.notificationService.showError("LDAP Domain is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.samlProviderArn.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.samlProviderArn)) {
                         this.notificationService.showError("SAML Provider ARN is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.principalArn.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.principalArn)) {
                         this.notificationService.showError("Principal ARN is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.roleArn.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.roleArn)) {
                         this.notificationService.showError("Role ARN is mandatory");
                         return false;
                     }
                 }
                 else if (this.connectionModel.scCrdntlAccessType === SC_CREDENTIALS_ACCESS_TYPE.AWS_FEDERATED_USER) {
-                    if (this.connectionModel.fdrtdUserName.length < 1) {
+                    if (!this.isPropValExists(this.connectionModel.fdrtdUserName)) {
                         this.notificationService.showError("Federated User Name is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.awsAccessIdSc.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.awsAccessIdSc)) {
                         this.notificationService.showError("AWS Access ID is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.awsSecretKeySc.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.awsSecretKeySc)) {
                         this.notificationService.showError("AWS Secret Key is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.inlineSesnPolicy.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.inlineSesnPolicy)) {
                         this.notificationService.showError("Inline Session Policy is mandatory");
                         return false;
                     }
+                }
+                else {
+                    this.notificationService.showError("Please select AWS Credential Access type");
+                    return false;
                 }
             }
         }
@@ -207,33 +218,33 @@ export class ConnectionComponent implements OnInit {
         else if (connectionGroup === CONNECTION_GROUP.HDFS) {
             if (this.connectionModel.hiveConnEnabled || this.connectionModel.impalaConnEnabled || this.connectionModel.sparkConnEnabled) {
                 if (this.connectionModel.hiveConnEnabled) {
-                    if (this.connectionModel.hiveHostName.length < 1) {
+                    if (!this.isPropValExists(this.connectionModel.hiveHostName)) {
                         this.notificationService.showError("Hive Host Name is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.hivePortNmbr.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.hivePortNmbr)) {
                         this.notificationService.showError("Hive Port Number is mandatory");
                         return false;
                     }
                 }
 
                 if (this.connectionModel.impalaConnEnabled) {
-                    if (this.connectionModel.impalaHostName.length < 1) {
+                    if (!this.isPropValExists(this.connectionModel.impalaHostName)) {
                         this.notificationService.showError("Impala Host Name is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.impalaPortNmbr.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.impalaPortNmbr)) {
                         this.notificationService.showError("Impala Port Number is mandatory");
                         return false;
                     }
                 }
 
                 if (this.connectionModel.sparkConnEnabled) {
-                    if (this.connectionModel.sqlWhDir.length < 1) {
+                    if (!this.isPropValExists(this.connectionModel.sqlWhDir)) {
                         this.notificationService.showError("SQL Warehouse Dir is mandatory");
                         return false;
                     }
-                    else if (this.connectionModel.hiveMsUri.length < 1) {
+                    else if (!this.isPropValExists(this.connectionModel.hiveMsUri)) {
                         this.notificationService.showError("Hive Metastore URI is mandatory");
                         return false;
                     }
@@ -248,33 +259,33 @@ export class ConnectionComponent implements OnInit {
                 if (this.connectionModel.authenticationType == AUTHENTICATION_TYPE.SECURED) {
                     if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.LDAP || this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.KERBEROS) {
                         if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.LDAP) {
-                            if (this.connectionModel.ldapUserName.length < 1) {
+                            if (!this.isPropValExists(this.connectionModel.hdfsLdapUserName)) {
                                 this.notificationService.showError("LDAP User Name is mandatory");
                                 return false;
                             }
-                            else if (this.connectionModel.ldapUserPassw.length < 1) {
-                                this.notificationService.showError("LDAP Password URI is mandatory");
+                            else if (!this.isPropValExists(this.connectionModel.hdfsLdapUserPassw)) {
+                                this.notificationService.showError("LDAP Password  is mandatory");
                                 return false;
                             }
-                            else if (this.connectionModel.ldapDomain.length < 1) {
+                            else if (!this.isPropValExists(this.connectionModel.hdfsLdapDomain)) {
                                 this.notificationService.showError("LDAP Domain is mandatory");
                                 return false;
                             }
                         }
                         else if (this.connectionModel.credentialStrgType === CREDENTIAL_STORAGE_TYPE.KERBEROS) {
-                            if (this.connectionModel.kerberosHostRealm.length < 1) {
+                            if (!this.isPropValExists(this.connectionModel.kerberosHostRealm)) {
                                 this.notificationService.showError("Host Realm is mandatory");
                                 return false;
                             }
-                            else if (this.connectionModel.kerberosHostFqdn.length < 1) {
+                            else if (!this.isPropValExists(this.connectionModel.kerberosHostFqdn)) {
                                 this.notificationService.showError("Host FQDN is mandatory");
                                 return false;
                             }
-                            else if (this.connectionModel.kerberosServiceName.length < 1) {
+                            else if (!this.isPropValExists(this.connectionModel.kerberosServiceName)) {
                                 this.notificationService.showError("Service Name is mandatory");
                                 return false;
                             }
-                            else if (this.connectionModel.sslKeystorePath.length < 1) {
+                            else if (!this.isPropValExists(this.connectionModel.sslKeystorePath)) {
                                 this.notificationService.showError("SSL Keystore Path is mandatory");
                                 return false;
                             }
@@ -293,11 +304,22 @@ export class ConnectionComponent implements OnInit {
         }
 
         else if (connectionGroup === CONNECTION_GROUP.TARGET_FILE_PROPS) {
-            if (this.connectionModel.tgtFormatPropTempDto.formatType == FORMAT_TYPE.TEXT) {
-                if (this.connectionModel.tgtFormatPropTempDto.fieldDelimiter.length < 1) {
-                    this.notificationService.showError("Field Delimiter is mandatory");
-                    return false;
+            if (this.isPropValExists(this.connectionModel.tgtFormatPropTempDto.formatType)) {
+                if (this.connectionModel.tgtFormatPropTempDto.formatType == FORMAT_TYPE.TEXT) {
+                    if (!this.isPropValExists(this.connectionModel.tgtFormatPropTempDto.fieldDelimiter)) {
+                        this.notificationService.showError("Field Delimiter is mandatory");
+                        return false;
+                    }
                 }
+            }
+            else {
+                this.notificationService.showError("Please select Target Format");
+                return false;
+            }
+
+            if (!this.isPropValExists(this.connectionModel.tgtFormatPropTempDto.compressionType)) {
+                this.notificationService.showError("Please select Target Compression");
+                return false;
             }
         }
 
@@ -342,6 +364,9 @@ export class ConnectionComponent implements OnInit {
             this.connectionModel.connectionGroup = connectionGroup;
             this.appService.saveConnection(this.connectionModel).subscribe((res) => {
                 this.markConnectionFlag(connectionGroup, false);
+                if (this.connectionModel.connectionGroup === CONNECTION_GROUP.TARGET_FILE_PROPS) {
+                    this.authenticationService.setTokenizationEnabled(this.connectionModel.tgtOtherPropDto.tokenizationInd === YES_OR_NO_OPTIONS.YES ? true : false);
+                }
                 this.notificationService.showSuccess('Connection saved successfully');
             }, (error) => {
                 this.notificationService.showError(error || 'System Temporarly Unavailable . Please try again');

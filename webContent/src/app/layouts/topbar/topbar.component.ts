@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../../core/services/auth.service';
+import { AppService } from 'src/app/core/services/app.service';
 
 
 @Component({
@@ -21,7 +22,15 @@ export class TopbarComponent implements OnInit {
 
   currentUser: any;
 
-  constructor(private router: Router, private authService: AuthenticationService) { }
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService,
+    private appService: AppService
+  ) {
+    this.appService.basketCountSubscription.subscribe((basketCount: any) => {
+      this.basketCount = basketCount;
+    });
+  }
 
   ngOnInit() {
     this.openMobileMenu = false;
@@ -51,6 +60,14 @@ export class TopbarComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
+  }
+
+  openBasketDetails() {
+    if (this.router.url !== '/app/request/preview') {
+      if (this.basketCount != null && this.basketCount > 0) {
+        this.router.navigate(['/app/basket']);
+      }
+    }
   }
 
 }

@@ -30,6 +30,14 @@ export class AuthenticationService {
         this.cookieService.setCookie('currentUser', JSON.stringify(user), 30);
     }
 
+    isTokenizationEnabled() {
+        return this.user["tokenization"] != null && this.user["tokenization"] != undefined ? this.user["tokenization"] : false;
+    }
+
+    setTokenizationEnabled(status: boolean) {
+        this.user["tokenization"] = status;
+    }
+
     /**
      * Performs the auth
      * @param userName userName of user
