@@ -72,7 +72,7 @@ export class BasketComponent implements OnInit {
         this.appService.saveBasketData(this.tableData).subscribe(
             (res: any) => {
                 this.appService.basketCountSubscription.next(0);
-                this.router.navigate(['/app/request']);
+                this.router.navigate(['/app/history']);
                 this.notificationService.showSuccess("Data saved successfully to basket");
             },
             (error) => {
