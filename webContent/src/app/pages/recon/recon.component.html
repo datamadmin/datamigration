@@ -31,9 +31,10 @@
                       </span>
                       <span *ngSwitchCase="'status'">
                         <span *ngIf="rowData.status=='Not Started'" class="badge badge-secondary">Not Started</span>
-                        <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In Progress</span>
-                        <span *ngIf="rowData.status=='Completed'" class="badge badge-success">Completed</span>
-                        <span *ngIf="rowData.status=='Error'" class="badge badge-danger">Error</span>
+                        <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In
+                          Progress</span>
+                        <span *ngIf="rowData.status=='Submitted'" class="badge badge-success">Successful</span>
+                        <span *ngIf="rowData.status=='Failed'" class="badge badge-danger">Failed</span>
                       </span>
                       <span *ngSwitchDefault>
                         {{rowData[col.field]}}
@@ -76,9 +77,10 @@
                 <td *ngFor="let col of columns" [ngSwitch]="col.field">
                   <span *ngSwitchCase="'status'">
                     <span *ngIf="rowData.status=='Not Started'" class="badge badge-secondary">Not Started</span>
-                    <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In Progress</span>
-                    <span *ngIf="rowData.status=='Completed'" class="badge badge-success">Completed</span>
-                    <span *ngIf="rowData.status=='Error'" class="badge badge-danger">Error</span>
+                    <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In
+                      Progress</span>
+                    <span *ngIf="rowData.status=='Submitted'" class="badge badge-success">Successful</span>
+                    <span *ngIf="rowData.status=='Failed'" class="badge badge-danger">Failed</span>
                   </span>
                   <span *ngSwitchDefault>
                     {{rowData[col.field]}}

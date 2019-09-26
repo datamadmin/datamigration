@@ -42,7 +42,7 @@ export class RequestPreviewComponent implements OnInit, OnDestroy {
                 item["incrementalFlag"] = "N";
                 item["incrementalClmn"] = null;
                 item["labelName"] = this.requestModel["labelName"];
-                item["targetS3Bucket"] = item["tableName"] + "/" + item["targetS3Bucket"]
+                item["targetS3Bucket"] = item["targetS3Bucket"] + "/" + item["tableName"];
             });
 
             // tslint:disable-next-line: max-line-length
@@ -83,7 +83,7 @@ export class RequestPreviewComponent implements OnInit, OnDestroy {
         if (this.selectedRequestList.length > 0) {
 
             this.selectedRequestList.forEach(item => {
-                item["userId"] = this.appService.getCurrentUserId();
+                item["userId"] = this.appService.getCurrentUserName();
                 item["addtoBasket"] = true;
             });
 

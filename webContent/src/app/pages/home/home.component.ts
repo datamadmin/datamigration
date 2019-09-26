@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
           this.contentClicked('request', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Completed", "Error"]
+      labels: ["Not Started", "In Progress", "Successfull", "Failed"]
     };
 
     this.reconStatusChartConfig = {
@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit {
           this.contentClicked('recon', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Completed", "Error"]
+      labels: ["Not Started", "In Progress", "Successful", "Failed"]
     };
 
     this.fetchChartData();
@@ -154,7 +154,7 @@ export class HomeComponent implements OnInit {
     this.appService.getHomeScreenData().subscribe(
       (res) => {
         this.chartData = [];
-        let propList = ["Not Started", "In Progress", "Completed", "Error"];
+        let propList = ["Not Started", "In Progress", "Submitted", "Failed"];
         let requestStatus = [];
         let reconStatus = [];
 

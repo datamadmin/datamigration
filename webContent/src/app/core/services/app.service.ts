@@ -19,6 +19,11 @@ export class AppService {
         return currentUserId;
     }
 
+    getCurrentUserName(): any {
+        let currentUserName = this.authenticationService.currentUser()["userName"];
+        return currentUserName;
+    }
+
     requestModel: any;
     requestPreviewList: any = [];
     isRequestBackClicked: boolean = false;
@@ -102,7 +107,7 @@ export class AppService {
 
     saveRequestPreviewData(basketList: any) {
         let headers = new HttpHeaders({
-            'userId': this.getCurrentUserId()
+            'userId': this.getCurrentUserName()
         });
         return this.http.post(`${environment.apiUrl}/basket/save`, basketList, { headers: headers });
     }
@@ -113,20 +118,20 @@ export class AppService {
 
     saveBasketData(basketList: any) {
         let headers = new HttpHeaders({
-            'userId': this.getCurrentUserId()
+            'userId': this.getCurrentUserName()
         });
         return this.http.post(`${environment.apiUrl}/basket/save/purge`, basketList, { headers: headers });
     }
 
     clearAllBasketItems(): any {
-        let headers = new HttpHeaders({
+        const params = {
             'userId': this.getCurrentUserId()
-        });
-        return this.http.get(`${environment.apiUrl}/basket/clear`, { headers: headers });
+        }
+        return this.http.get(`${environment.apiUrl}/basket/clear`, { params });
     }
 
     cancelAllBasketItems(): any {
-        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserId()}`);
+        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserName()}`);
     }
 
     getHomeScreenData() {

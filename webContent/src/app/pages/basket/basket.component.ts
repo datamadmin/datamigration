@@ -65,7 +65,7 @@ export class BasketComponent implements OnInit {
     }
 
     onCancelFunction() {
-        this.appService.cancelAllBasketItems().subscribe(
+        this.appService.clearAllBasketItems().subscribe(
             (res: any) => {
                 this.appService.basketCountSubscription.next(0);
                 this.notificationService.showSuccess("Basket items removed successfully ");
