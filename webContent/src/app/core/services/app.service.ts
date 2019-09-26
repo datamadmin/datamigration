@@ -116,14 +116,14 @@ export class AppService {
     }
 
     clearAllBasketItems(): any {
-		  const params = {
-            "userId": this.getCurrentUserId()
-			}
-        return this.http.get(`${environment.apiUrl}/basket/clear`, { params });
+        let headers = new HttpHeaders({
+            'userId': this.getCurrentUserId()
+        });
+        return this.http.get(`${environment.apiUrl}/basket/clear`, { headers: headers });
     }
 
     cancelAllBasketItems(): any {
-        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserId()})}`);
+        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserId()}`);
     }
 
     getHomeScreenData() {
