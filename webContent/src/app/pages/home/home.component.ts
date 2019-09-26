@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
     this.requestStatusChartConfig = {
       type: 'pie',
       title: {
-        text: "REQUEST STATUS",
+        text: "RECON STATUS",
         align: 'center',
         margin: 20,
         offsetX: 0,
@@ -74,13 +74,13 @@ export class HomeComponent implements OnInit {
           this.contentClicked('request', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Successfull", "Failed"]
+      labels: ["Not Started", "In Progress", "Submitted", "Failed"]
     };
 
     this.reconStatusChartConfig = {
       type: 'pie',
       title: {
-        text: "RECON STATUS",
+        text: "REQUEST STATUS",
         align: 'center',
         margin: 20,
         offsetX: 0,
@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit {
           this.contentClicked('recon', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Successful", "Failed"]
+      labels: ["Not Started", "In Progress", "Submitted", "Failed"]
     };
 
     this.fetchChartData();
@@ -139,11 +139,11 @@ export class HomeComponent implements OnInit {
     console.log(config);
     if (requestType == 'request') {
       let status = this.chartData[0]["requestStatus"]["labels"][config.dataPointIndex]
-      this.router.navigate(['/app/history'], { queryParams: { status: status } });
+      this.router.navigate(['/app/recon'], { queryParams: { status: status } });
     }
     else if (requestType == 'recon') {
       let status = this.chartData[0]["reconStatus"]["labels"][config.dataPointIndex]
-      this.router.navigate(['/app/recon'], { queryParams: { status: status } });
+      this.router.navigate(['/app/history'], { queryParams: { status: status } });
     }
   }
 
