@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dataeconomy.migration.app.model.DMUBasketDto;
 import com.dataeconomy.migration.app.model.TGTOtherPropDto;
 import com.dataeconomy.migration.app.model.UserDto;
 import com.dataeconomy.migration.app.mysql.entity.DMUUsers;
+import com.dataeconomy.migration.app.service.DMUBasketService;
 import com.dataeconomy.migration.app.service.TGTOtherPropService;
 import com.dataeconomy.migration.app.service.UserService;
 
@@ -28,6 +30,10 @@ public class UserController {
 
 	@Autowired
 	TGTOtherPropService tgtOtherPropService;
+
+	@Autowired
+	DMUBasketService dmuBasketService;
+
 
 	@GetMapping("/all")
 	public List<UserDto> getUsers() {
@@ -67,6 +73,11 @@ public class UserController {
 		{
 			dm.setTokenization(false);
 		}
+		if(dm.getId()!=null && dmuBasketService.getBasketDetailsByUserId(dm.getId())!=null && dmuBasketService.getBasketDetailsByUserId(dm.getId()).size()>0)
+		{
+			dm.setBasketCount(dmuBasketService.getBasketDetailsByUserId(dm.getId()).size());
+		}
+
 		return dm;
 	}
 
