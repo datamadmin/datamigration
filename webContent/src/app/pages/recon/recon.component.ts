@@ -56,18 +56,24 @@ export class ReconComponent implements OnInit {
     this.masterCols = [
       { field: 'requestNo', header: 'Request No' },
       { field: 'userId', header: 'Requested By' },
+      { field: 'requestedTime', header: 'Requested Time' },
+      { field: 'status', header: 'Recon Status' },
+      { field: 'requestType', header: 'Request Type' },
       { field: 'reconStartTime', header: 'Recon Start Time' },
       { field: 'reconCmpltTime', header: 'Recon Completed Time' },
-      { field: 'status', header: 'Recon Status' }
     ];
 
     this.detailCols = [
       { field: 'requestNo', header: 'Sr.no' },
       { field: 'schemaName', header: 'Database Name' },
       { field: 'tableName', header: 'Table Name' },
+      { field: 'filterCondition', header: 'Filter Condition' },
+      { field: 'targetS3Bucket', header: 'Target Bucket Name' },
+      { field: 'incrementalFlag', header: 'Incremental Flag' },
+      { field: 'incrementalColumn', header: 'Incremental Column' },
       { field: 'sourceCount', header: 'Source Account' },
       { field: 'targetCount', header: 'Target Account' },
-      { field: 'status', header: 'Status' }
+      { field: 'status', header: 'Recon Status' }
     ];
 
 
@@ -106,7 +112,7 @@ export class ReconComponent implements OnInit {
         this.showDetail = true;
       },
       (error) => {
-        this.notificationService.showError(error ||  "System Temporarly unavailable");
+        this.notificationService.showError(error || "System Temporarly unavailable");
       });
   }
 

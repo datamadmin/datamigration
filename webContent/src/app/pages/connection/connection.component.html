@@ -561,9 +561,8 @@
                                             </div>
 
                                             <div class="form-group row">
-                                                <h5>Tokenization</h5>
+                                                <h5>HDFS</h5>
                                             </div>
-
                                             <div class="form-group row">
                                                 <label for="tempHiveDB" class="col-sm-2 col-form-label">Temporary
                                                     Hive Database
@@ -612,6 +611,20 @@
                                                         [(ngModel)]="connectionModel.tgtOtherPropDto.hdfsPemLocation"
                                                         name="hdfsPemLocation" pInputText class="form-control">
                                                 </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="hadoopInstallDir" class="col-sm-2 col-form-label">Hadoop
+                                                    Installation Dir
+                                                </label>
+                                                <div class="col-sm-4">
+                                                    <input type="text"
+                                                        [(ngModel)]="connectionModel.tgtOtherPropDto.hadoopInstallDir"
+                                                        name="hadoopInstallDir" pInputText class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <h5>Tokenization</h5>
                                             </div>
 
                                             <div class="form-group row">

@@ -85,6 +85,7 @@ export class ConnectionComponent implements OnInit {
             "hdfcEdgeNode": "",
             "hdfsUserName": "",
             "hdfsPemLocation": "",
+            "hadoopInstallDir": "",
             "tokenizationInd": YES_OR_NO_OPTIONS.NO,
             "ptgyDirPath": ""
         }
@@ -364,7 +365,7 @@ export class ConnectionComponent implements OnInit {
             this.connectionModel.connectionGroup = connectionGroup;
             this.appService.saveConnection(this.connectionModel).subscribe((res) => {
                 this.markConnectionFlag(connectionGroup, false);
-                if (this.connectionModel.connectionGroup === CONNECTION_GROUP.TARGET_FILE_PROPS) {
+                if (this.connectionModel.connectionGroup === CONNECTION_GROUP.OTHER_PROPS) {
                     this.authenticationService.setTokenizationEnabled(this.connectionModel.tgtOtherPropDto.tokenizationInd === YES_OR_NO_OPTIONS.YES ? true : false);
                 }
                 this.notificationService.showSuccess('Connection saved successfully');

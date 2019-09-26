@@ -30,8 +30,9 @@
                           (click)="openReconDetails(rowData)">{{rowData[col.field]}}</a>
                       </span>
                       <span *ngSwitchCase="'status'">
-                        <span *ngIf="rowData.status=='Completed'" class="badge badge-success">Completed</span>
+                        <span *ngIf="rowData.status=='Not Started'" class="badge badge-secondary">Not Started</span>
                         <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In Progress</span>
+                        <span *ngIf="rowData.status=='Completed'" class="badge badge-success">Completed</span>
                         <span *ngIf="rowData.status=='Error'" class="badge badge-danger">Error</span>
                       </span>
                       <span *ngSwitchDefault>
@@ -74,8 +75,9 @@
               <tr>
                 <td *ngFor="let col of columns" [ngSwitch]="col.field">
                   <span *ngSwitchCase="'status'">
-                    <span *ngIf="rowData.status=='Completed'" class="badge badge-success">Completed</span>
+                    <span *ngIf="rowData.status=='Not Started'" class="badge badge-secondary">Not Started</span>
                     <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In Progress</span>
+                    <span *ngIf="rowData.status=='Completed'" class="badge badge-success">Completed</span>
                     <span *ngIf="rowData.status=='Error'" class="badge badge-danger">Error</span>
                   </span>
                   <span *ngSwitchDefault>
