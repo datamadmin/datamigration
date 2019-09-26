@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dataeconomy.migration.app.model.DMUBasketDto;
 import com.dataeconomy.migration.app.model.TGTOtherPropDto;
 import com.dataeconomy.migration.app.model.UserDto;
 import com.dataeconomy.migration.app.mysql.entity.DMUUsers;
@@ -33,7 +32,6 @@ public class UserController {
 
 	@Autowired
 	DMUBasketService dmuBasketService;
-
 
 	@GetMapping("/all")
 	public List<UserDto> getUsers() {
@@ -63,21 +61,18 @@ public class UserController {
 	@GetMapping("/login")
 	public DMUUsers login(@RequestParam("userName") String userName, @RequestParam("password") String password) {
 		DMUUsers dm = new DMUUsers();
-		List<TGTOtherPropDto> tgoProList=tgtOtherPropService.getAllTGTOtherProp();
+		List<TGTOtherPropDto> tgoProList = tgtOtherPropService.getAllTGTOtherProp();
 		dm = userService.login(userName, Base64.getEncoder().encodeToString(password.getBytes()));
-		if(tgoProList!=null && tgoProList.size()>0 && tgoProList.get(0).getTokenizationInd().equalsIgnoreCase("Y"))
-		{
+		if (tgoProList != null && tgoProList.size() > 0
+				&& tgoProList.get(0).getTokenizationInd().equalsIgnoreCase("Y")) {
 			dm.setTokenization(true);
-		}
-		else
-		{
+		} else {
 			dm.setTokenization(false);
 		}
-		if(dm.getId()!=null && dmuBasketService.getBasketDetailsByUserId(dm.getId())!=null && dmuBasketService.getBasketDetailsByUserId(dm.getId()).size()>0)
-		{
+		if (dm.getId() != null && dmuBasketService.getBasketDetailsByUserId(dm.getId()) != null
+				&& dmuBasketService.getBasketDetailsByUserId(dm.getId()).size() > 0) {
 			dm.setBasketCount(dmuBasketService.getBasketDetailsByUserId(dm.getId()).size());
 		}
-
 		return dm;
 	}
 
@@ -85,6 +80,7 @@ public class UserController {
 	public boolean resetPassword(@RequestParam("id") String userId, @RequestParam("password") String password) {
 		return userService.resetPassword(userId, Base64.getEncoder().encodeToString(password.getBytes()));
 	}
+
 	@GetMapping("/forgotPassword")
 	public boolean forgotPassword(@RequestParam("userName") String userName, @RequestParam("emailid") String emailid) {
 		return userService.forgotPassword(userName, emailid);

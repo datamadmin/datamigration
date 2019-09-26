@@ -47,5 +47,7 @@ public class DMUBasketTemp {
 
 	@Column(name = "LABEL_NAME", length = 50, nullable = true)
 	private String labelName;
-
+	
+	@Column(name = "REQUEST_TYPE", length = 50, nullable = true)
+	private String requestType;
 }
