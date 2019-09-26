@@ -34,8 +34,8 @@ export class TopbarComponent implements OnInit {
 
   ngOnInit() {
     this.openMobileMenu = false;
-    this.basketCount = 0;
     this.currentUser = this.authService.currentUser();
+    this.basketCount = this.currentUser["basketCount"] ? this.currentUser["basketCount"] : 0;
   }
 
   /**

@@ -37,17 +37,18 @@ export class RequestPreviewComponent implements OnInit, OnDestroy {
             this.requestModel = this.appService.requestModel;
             this.previewList = this.appService.requestPreviewList;
 
-            this.previewList.forEach(item => {
+            this.previewList.forEach((item: any) => {
                 item["targetS3Bucket"] = this.requestModel["targetS3Bucket"];
                 item["incrementalFlag"] = "N";
                 item["incrementalClmn"] = null;
                 item["labelName"] = this.requestModel["labelName"];
+                item["targetS3Bucket"] = item["tableName"] + "/" + item["targetS3Bucket"]
             });
 
             // tslint:disable-next-line: max-line-length
             this.breadCrumbItems = [
                 { label: 'Home', path: '/app/home' },
-                { label: 'Request', path: '/app/request' },
+                { label: 'Request', path: '/app/request', active: true },
                 { label: this.requestModel.requestType, active: true },
                 { label: this.requestModel.migrationType, active: true },
                 { label: this.requestModel.schemaName, active: true }

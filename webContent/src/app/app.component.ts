@@ -21,14 +21,6 @@ export class AppComponent implements OnInit {
     this.loaderService.isLoading.subscribe((isSpinnerVisible) => {
       this.isSpinnerVisible = isSpinnerVisible;
     });
-
-    this.appService.getAllBasketItems().subscribe(
-      data => {
-        this.appService.basketCountSubscription.next(data.length);
-      },
-      error => {
-        console.log(error);
-      });
   }
 
 }

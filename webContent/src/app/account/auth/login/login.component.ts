@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { AuthenticationService } from 'src/app/core/services/auth.service';
+import { AppService } from 'src/app/core/services/app.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router,
     private authenticationService: AuthenticationService,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private appService: AppService
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({

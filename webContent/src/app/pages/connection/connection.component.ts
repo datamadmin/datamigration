@@ -82,7 +82,7 @@ export class ConnectionComponent implements OnInit {
             "parallelUsrRqst": "",
             "tempHiveDB": "",
             "tempHdfsDir": "",
-            "hdfcEdgeNode": "",
+            "hdfsEdgeNode": "",
             "hdfsUserName": "",
             "hdfsPemLocation": "",
             "hadoopInstallDir": "",

@@ -62,10 +62,13 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="float-right" *ngIf="isTokenizationEnabled">
+                    <div class="float-right">
                         <div class="btn-group mb-2">
-                            <a class="link text-success" (click)="downloadTokenizationDetails()">Tokenization
+                            <a *ngIf="isTokenizationEnabled" class="btn btn-link text-success"
+                                (click)="downloadTokenizationDetails()">Tokenization
                                 Details</a>
+                            <button class="btn btn-sm btn-secondary" type="button" (click)="cancelDetails()"><i
+                                    class="fas fa-arrow-left mr-2"></i>Back</button>
                         </div>
                     </div>
                     <h4 class="header-title">Request #{{selectedRec.requestNo}}</h4>
