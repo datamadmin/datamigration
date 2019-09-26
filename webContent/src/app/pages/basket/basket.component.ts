@@ -65,7 +65,15 @@ export class BasketComponent implements OnInit {
     }
 
     onCancelFunction() {
-        this.router.navigate(['/app/request']);
+        this.appService.clearAllBasketItems().subscribe(
+            (res: any) => {
+                this.appService.basketCountSubscription.next(0);
+                this.notificationService.showSuccess("Basket items cleared successfully ");
+                this.router.navigate(['/app/request']);
+            },
+            (error) => {
+                this.notificationService.showError(error || "System Temporarly unavailable");
+            });
     }
 
     onContinueFunction() {
@@ -84,15 +92,7 @@ export class BasketComponent implements OnInit {
         this.confirmationService.confirm({
             message: 'Are you sure want to delete the items?',
             accept: () => {
-                this.appService.clearAllBasketItems().subscribe(
-                    (res: any) => {
-                        this.appService.basketCountSubscription.next(0);
-                        this.notificationService.showSuccess("Basket items cleared successfully ");
-                        this.router.navigate(['/app/request']);
-                    },
-                    (error) => {
-                        this.notificationService.showError(error || "System Temporarly unavailable");
-                    });
+                this.onCancelFunction();
             }
         });
     }
