@@ -38,7 +38,7 @@ export enum FORMAT_TYPE {
 }
 
 export enum COMPRESSION_TYPE {
-    SOURCE = "SOURCE",
+    SOURCE = "SRC_COMPRESSION",
     UN_COMPRESSED = "UN_COMPRESSED",
     GZIP = "GZIP"
 }

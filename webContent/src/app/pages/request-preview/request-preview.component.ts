@@ -85,6 +85,7 @@ export class RequestPreviewComponent implements OnInit, OnDestroy {
             this.selectedRequestList.forEach(item => {
                 item["userId"] = this.appService.getCurrentUserName();
                 item["addtoBasket"] = true;
+                item["requestType"] = this.requestModel["requestType"];
             });
 
             this.appService.saveRequestPreviewData(this.selectedRequestList).subscribe(

@@ -125,13 +125,16 @@ export class AppService {
 
     clearAllBasketItems(): any {
         const params = {
-            'userId': this.getCurrentUserId()
-        }
+            'userId': this.getCurrentUserName()
+        };
         return this.http.get(`${environment.apiUrl}/basket/clear`, { params });
     }
 
     cancelAllBasketItems(): any {
-        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserName()}`);
+        const params = {
+            'userId': this.getCurrentUserName()
+        };
+        return this.http.delete(`${environment.apiUrl}/basket/delete`, { params });
     }
 
     getHomeScreenData() {
