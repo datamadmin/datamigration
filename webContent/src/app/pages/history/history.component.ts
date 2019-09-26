@@ -59,7 +59,7 @@ export class HistoryComponent implements OnInit, AfterViewInit {
             { field: 'requestNo', header: 'Request No' },
             { field: 'userId', header: 'Requested By' },
             { field: 'requestedTime', header: 'Requested Time' },
-            { field: 'status', header: 'Recon Status' },
+            { field: 'status', header: 'Status' },
             { field: 'requestType', header: 'Request Type' },
             { field: 'scriptGenCmpltTime', header: 'Script Generation Completed Time' },
             { field: 'exctnCmpltTime', header: 'Execution Completed Time' }

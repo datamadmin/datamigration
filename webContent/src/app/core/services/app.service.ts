@@ -116,10 +116,10 @@ export class AppService {
     }
 
     clearAllBasketItems(): any {
-        let headers = new HttpHeaders({
-            'userId': this.getCurrentUserId()
-        });
-        return this.http.get(`${environment.apiUrl}/basket/clear`, { headers: headers });
+		  const params = {
+            "userId": this.getCurrentUserId()
+			}
+        return this.http.get(`${environment.apiUrl}/basket/clear`, { params });
     }
 
     cancelAllBasketItems(): any {
