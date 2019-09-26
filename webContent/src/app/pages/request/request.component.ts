@@ -28,13 +28,13 @@ export class RequestComponent implements OnInit {
 
     requestModel = {
         "labelName": "",
-        "requestType": null, // HIVE TO S3 ,
+        "requestType": null,
         "migrationType": null,
         "schemaName": null,
         "migartionFileList": [],
-        "tknztnEnabled": YES_OR_NO_OPTIONS.NO,  // Y /N,
+        "tknztnEnabled": YES_OR_NO_OPTIONS.NO,
         'targetS3Bucket': "",
-        "tokenizationFileList": [],
+        "tokenizationFileList": []
     }
 
     constructor(
@@ -212,13 +212,13 @@ export class RequestComponent implements OnInit {
     cancelConnection() {
         this.requestModel = {
             "labelName": "",
-            "requestType": null, // HIVE TO S3 ,
+            "requestType": null,
             "migrationType": null,
             "schemaName": null,
             "migartionFileList": [],
-            "tknztnEnabled": YES_OR_NO_OPTIONS.NO,  // Y /N,
+            "tknztnEnabled": YES_OR_NO_OPTIONS.NO,
             'targetS3Bucket': "",
-            "tokenizationFileList": [],
+            "tokenizationFileList": []
         }
     }
 
@@ -245,10 +245,8 @@ export class RequestComponent implements OnInit {
                     if (res.length > 0) {
                         this.appService.requestModel = this.requestModel;
                         res.forEach(item => {
-                            item["targetS3Bucket"] = item["tableName"] + "/" + item["targetS3Bucket"];
-                            console.log(item["targetS3Bucket"]);
+                            item["targetS3Bucket"] = `${item["tableName"]}/${item["targetS3Bucket"]}`;
                         });
-
                         this.appService.requestPreviewList = res;
                         this.router.navigate(['/app/request/preview']);
                     }

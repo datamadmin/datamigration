@@ -81,16 +81,20 @@ export class BasketComponent implements OnInit {
             this.tableData.forEach(item => {
                 item["addtoBasket"] = true;
             });
+
+            this.appService.saveBasketData(this.tableData).subscribe(
+                (res: any) => {
+                    this.appService.basketCountSubscription.next(0);
+                    this.router.navigate(['/app/history']);
+                    this.notificationService.showSuccess("Data saved successfully to basket");
+                },
+                (error) => {
+                    this.notificationService.showError(error || "Error while saving basket info");
+                });
         }
-        this.appService.saveBasketData(this.tableData).subscribe(
-            (res: any) => {
-                this.appService.basketCountSubscription.next(0);
-                this.router.navigate(['/app/history']);
-                this.notificationService.showSuccess("Data saved successfully to basket");
-            },
-            (error) => {
-                this.notificationService.showError(error || "Error while saving basket info");
-            });
+        else {
+            this.notificationService.showError('No Data found in the basket to submit');
+        }
     }
 
     clearClickFunction() {
