@@ -66,7 +66,10 @@ export class AppService {
     }
 
     getHistoryDetailsById(requestNo: any) {
-        return this.http.get(`${environment.apiUrl}/history/all/${requestNo}`);
+        const params = {
+            "requestNumber": requestNo
+        }
+        return this.http.get(`${environment.apiUrl}/history/getHistoryDetail`, { params });
     }
 
     getReconMainList() {
