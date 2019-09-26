@@ -9,14 +9,14 @@ export class AuthenticationService {
     user: any;
 
     constructor(private http: HttpClient, private cookieService: CookieService) {
-        this.initCurrentUser();
+        // this.initCurrentUser();
     }
 
-    initCurrentUser() {
-        if (this.cookieService.getCookie('currentUser')) {
-            this.user = JSON.parse(this.cookieService.getCookie('currentUser'));
-        }
-    }
+    /* initCurrentUser() {
+         if (this.cookieService.getCookie('currentUser')) {
+             this.user = JSON.parse(this.cookieService.getCookie('currentUser'));
+         }
+     }*/
 
     /**
      * Returns the current user
@@ -27,7 +27,7 @@ export class AuthenticationService {
 
     setUser(user: any) {
         this.user = user;
-        this.cookieService.setCookie('currentUser', JSON.stringify(user), 30);
+        //this.cookieService.setCookie('currentUser', JSON.stringify(user), 30);
     }
 
     isTokenizationEnabled() {
@@ -56,7 +56,7 @@ export class AuthenticationService {
      */
     logout() {
         // remove user from local storage to log user out
-        this.cookieService.deleteCookie('currentUser');
+        // this.cookieService.deleteCookie('currentUser');
         this.user = null;
     }
 }

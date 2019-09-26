@@ -77,6 +77,11 @@ export class BasketComponent implements OnInit {
     }
 
     onContinueFunction() {
+        if (this.tableData.length > 0) {
+            this.tableData.forEach(item => {
+                item["addtoBasket"] = true;
+            });
+        }
         this.appService.saveBasketData(this.tableData).subscribe(
             (res: any) => {
                 this.appService.basketCountSubscription.next(0);

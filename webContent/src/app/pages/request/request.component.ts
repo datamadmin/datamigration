@@ -244,6 +244,11 @@ export class RequestComponent implements OnInit {
                 (res: any) => {
                     if (res.length > 0) {
                         this.appService.requestModel = this.requestModel;
+                        res.forEach(item => {
+                            item["targetS3Bucket"] = item["tableName"] + "/" + item["targetS3Bucket"];
+                            console.log(item["targetS3Bucket"]);
+                        });
+
                         this.appService.requestPreviewList = res;
                         this.router.navigate(['/app/request/preview']);
                     }
