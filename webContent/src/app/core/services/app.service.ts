@@ -56,16 +56,6 @@ export class AppService {
         return this.http.get(`${environment.apiUrl}/users/forgotPassword`, { params });
     }
 
-    getAllBasketItems(): any {
-        return this.http.get(`${environment.apiUrl}/basket/all`);
-    }
-
-    clearAllBasketItems(): any {
-        let headers = new HttpHeaders({
-            'userId': this.getCurrentUserId()
-        });
-        return this.http.get(`${environment.apiUrl}/basket/clear`, { headers: headers });
-    }
 
     getAllUsers(): any {
         return this.http.get(`${environment.apiUrl}/users/all`);
@@ -114,11 +104,26 @@ export class AppService {
         return this.http.post(`${environment.apiUrl}/basket/save`, basketList, { headers: headers });
     }
 
+    getAllBasketItems(): any {
+        return this.http.get(`${environment.apiUrl}/basket/all`);
+    }
+
     saveBasketData(basketList: any) {
         let headers = new HttpHeaders({
             'userId': this.getCurrentUserId()
         });
         return this.http.post(`${environment.apiUrl}/basket/save/purge`, basketList, { headers: headers });
+    }
+
+    clearAllBasketItems(): any {
+        let headers = new HttpHeaders({
+            'userId': this.getCurrentUserId()
+        });
+        return this.http.get(`${environment.apiUrl}/basket/clear`, { headers: headers });
+    }
+
+    cancelAllBasketItems(): any {
+        return this.http.delete(`${environment.apiUrl}/basket/delete/${this.getCurrentUserId()})}`);
     }
 
     getHomeScreenData() {
