@@ -223,7 +223,7 @@ public class DMUBasketService {
 			return Collections.emptyList();
 		}
 	}
-
+	@Transactional(rollbackFor = Exception.class)
 	public boolean purgeBasketDetailsBySrNo(Long srNo) throws DataMigrationException {
 		try {
 			basketTempRepository.deleteBySrNo(srNo);
@@ -233,14 +233,14 @@ public class DMUBasketService {
 		}
 
 	}
-
+	@Transactional(rollbackFor = Exception.class)
 	public boolean clearBasketDetails(String userName) throws DataMigrationException {
 		try {
 			basketTempRepository.deleteById(userName);
 			dmuPtgyRepository.deleteByRequestedUserName(userName);
 			return true;
 		} catch (Exception exception) {
-			throw new DataMigrationException("Unable to clear basket details ");
+			throw new DataMigrationException("Unable to clear basket details "+exception);
 		}
 	}
 

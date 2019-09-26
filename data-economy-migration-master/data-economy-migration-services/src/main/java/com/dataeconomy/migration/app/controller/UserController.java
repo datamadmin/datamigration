@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dataeconomy.migration.app.model.TGTOtherPropDto;
 import com.dataeconomy.migration.app.model.UserDto;
 import com.dataeconomy.migration.app.mysql.entity.DMUUsers;
+import com.dataeconomy.migration.app.service.TGTOtherPropService;
 import com.dataeconomy.migration.app.service.UserService;
 
 @RestController
@@ -23,6 +25,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	TGTOtherPropService tgtOtherPropService;
 
 	@GetMapping("/all")
 	public List<UserDto> getUsers() {
@@ -51,16 +56,24 @@ public class UserController {
 
 	@GetMapping("/login")
 	public DMUUsers login(@RequestParam("userName") String userName, @RequestParam("password") String password) {
-		System.out.println("**userName***" + userName + "password***" + password);
-		return userService.login(userName, Base64.getEncoder().encodeToString(password.getBytes()));
+		DMUUsers dm = new DMUUsers();
+		List<TGTOtherPropDto> tgoProList=tgtOtherPropService.getAllTGTOtherProp();
+		dm = userService.login(userName, Base64.getEncoder().encodeToString(password.getBytes()));
+		if(tgoProList!=null && tgoProList.size()>0 && tgoProList.get(0).getTokenizationInd().equalsIgnoreCase("Y"))
+		{
+			dm.setTokenization(true);
+		}
+		else
+		{
+			dm.setTokenization(false);
+		}
+		return dm;
 	}
 
 	@GetMapping("/resetPassword")
 	public boolean resetPassword(@RequestParam("id") String userId, @RequestParam("password") String password) {
-		System.out.println("**userName***" + userId + "password***" + userId);
 		return userService.resetPassword(userId, Base64.getEncoder().encodeToString(password.getBytes()));
 	}
-
 	@GetMapping("/forgotPassword")
 	public boolean forgotPassword(@RequestParam("userName") String userName, @RequestParam("emailid") String emailid) {
 		return userService.forgotPassword(userName, emailid);
