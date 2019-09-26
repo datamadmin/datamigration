@@ -75,7 +75,7 @@
                     <div class="ui-g mt-4">
                         <div class="ui-g-12">
                             <p-table [paginator]="true" [rows]="10" [style]="{width:'100%'}" [scrollable]="true"
-                                [columns]="detailCols" [value]="selectedRec.details">
+                                [columns]="detailCols" [value]="detailList">
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
                                         <th *ngFor="let col of columns">
