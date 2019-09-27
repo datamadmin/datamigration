@@ -64,7 +64,7 @@ export class ReconComponent implements OnInit {
     ];
 
     this.detailCols = [
-      { field: 'requestNo', header: 'Sr.no' },
+      { field: 'srNo', header: 'Sr.no' },
       { field: 'schemaName', header: 'Database Name' },
       { field: 'tableName', header: 'Table Name' },
       { field: 'filterCondition', header: 'Filter Condition' },

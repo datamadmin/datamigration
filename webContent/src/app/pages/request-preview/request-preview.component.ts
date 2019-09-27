@@ -38,6 +38,7 @@ export class RequestPreviewComponent implements OnInit, OnDestroy {
             this.previewList = this.appService.requestPreviewList;
 
             this.previewList.forEach((item: any) => {
+                item["targetS3Bucket"] = this.requestModel["targetS3Bucket"];
                 item["incrementalFlag"] = "N";
                 item["incrementalClmn"] = null;
                 item["labelName"] = this.requestModel["labelName"];
