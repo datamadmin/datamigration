@@ -55,18 +55,29 @@ export class HistoryComponent implements OnInit, AfterViewInit {
          */
         this._fetchData();
 
-        this.masterCols = [
-            { field: 'requestNo', header: 'Request No' },
-            { field: 'userId', header: 'Requested By' },
-            { field: 'requestedTime', header: 'Requested Time' },
-            { field: 'status', header: 'Status' },
-            { field: 'requestType', header: 'Request Type' },
-            { field: 'scriptGenCmpltTime', header: 'Script Generation Completed Time' },
-            { field: 'exctnCmpltTime', header: 'Execution Completed Time' }
-        ];
-
         if (this.isTokenizationEnabled) {
-            this.masterCols.push({ field: 'tknztnEnabled', header: 'Tokenization Enabled' })
+            this.masterCols = [
+                { field: 'requestNo', header: 'Request No' },
+                { field: 'userId', header: 'Requested By' },
+                { field: 'requestedTime', header: 'Requested Time' },
+                { field: 'tknztnEnabled', header: 'Tokenization Enabled' },
+                { field: 'status', header: 'Status' },
+                { field: 'requestType', header: 'Request Type' },
+                { field: 'scriptGenCmpltTime', header: 'Script Generation Completed Time' },
+                { field: 'exctnCmpltTime', header: 'Execution Completed Time' }
+            ];
+        }
+        else {
+            this.masterCols = [
+                { field: 'requestNo', header: 'Request No' },
+                { field: 'userId', header: 'Requested By' },
+                { field: 'requestedTime', header: 'Requested Time' },
+                { field: 'status', header: 'Status' },
+                { field: 'requestType', header: 'Request Type' },
+                { field: 'scriptGenCmpltTime', header: 'Script Generation Completed Time' },
+                { field: 'exctnCmpltTime', header: 'Execution Completed Time' }
+            ];
+
         }
 
         this.detailCols = [

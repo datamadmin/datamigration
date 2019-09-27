@@ -84,21 +84,22 @@
                                     <ng-template [ngIf]="isTokenizationEnabled && requestModel.migrationType">
                                         <div class="ui-g" *ngIf="requestModel.migrationType">
                                             <div class="ui-g-12">
-                                                <label for="tokenizeDataFlag">Tokenize the data before copying?
+                                                <label for="tknztnEnabled">Tokenize the data before copying?
                                                 </label>
                                             </div>
                                             <div class="ui-g-12">
-                                                <p-radioButton name="tokenizeDataFlag" class="mr-1" label="Yes"
-                                                    value="Y" disabled="true" [(ngModel)]="requestModel.tknztnEnabled">
+                                                <p-radioButton name="tknztnEnabled" class="mr-1" label="Yes" value="Y"
+                                                    [disabled]="!isTokenizationEnabled"
+                                                    [(ngModel)]="requestModel.tknztnEnabled">
                                                 </p-radioButton>
-                                                <p-radioButton name="tokenizeDataFlag" label="No" value="N"
+                                                <p-radioButton name="tknztnEnabled" label="No" value="N"
                                                     [(ngModel)]="requestModel.tknztnEnabled">
                                                 </p-radioButton>
                                             </div>
                                         </div>
                                     </ng-template>
                                     <ng-template
-                                        [ngIf]="isTokenizationEnabled && requestModel.migrationType && requestModel.tokenizeDataFlag=='Y'">
+                                        [ngIf]="isTokenizationEnabled && requestModel.migrationType && requestModel.tknztnEnabled=='Y'">
                                         <div class="ui-g">
                                             <div class="ui-g-12">
                                                 <label for="tokenizefilePath">Tokenization File Path</label>
@@ -121,7 +122,7 @@
                                                 <button class="btn btn-danger mr-2" type="button"
                                                     (click)="cancelConnection()">Cancel</button>
                                                 <button class="btn btn-info" type="button"
-                                                    (click)="onContinueFunction()">Save</button>
+                                                    (click)="onContinueFunction()">Continue</button>
                                             </div>
                                         </div>
                                     </div>

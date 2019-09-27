@@ -23,6 +23,9 @@ export class RequestComponent implements OnInit {
     filePathList: any = [];
     tokenizationFileList: any = [];
 
+    filePathRecords: any = [];
+    tokenizationFilePathRecords: any = [];
+
     activeTabIndex: number;
     isTokenizationEnabled: any;
 
@@ -49,6 +52,8 @@ export class RequestComponent implements OnInit {
         this.breadCrumbItems = [{ label: 'Home', path: '/app/home' }, { label: 'Request', active: true }];
 
         this.isTokenizationEnabled = this.authenticationService.isTokenizationEnabled();
+
+        this.requestModel.tknztnEnabled = this.isTokenizationEnabled ? YES_OR_NO_OPTIONS.YES : YES_OR_NO_OPTIONS.NO;
 
         this.migrationTypeOptions = [
             { label: 'Select Migration Type', value: null },
@@ -95,13 +100,13 @@ export class RequestComponent implements OnInit {
                 let data = row.split(',');
                 if (data.length == headerLength) {
                     let csvRecord = {
-                        sno: data[0],
-                        dbName: data[1],
+                        srNo: data[0],
+                        schemaName: data[1],
                         tableName: data[2],
                         filterCondition: data[3],
-                        targetBucketName: data[4],
+                        targetS3Bucket: data[4],
                         incrementalFlag: data[5],
-                        incrementalColumn: data[6]
+                        incrementalClmn: data[6]
                     }
                     dataArr.push(csvRecord);
                 }
@@ -131,8 +136,8 @@ export class RequestComponent implements OnInit {
                 let csvData: any = reader.result;
                 let csvRecordsArray = csvData.split(/\r\n|\n/);
                 let headersRow = this.getHeaderArray(csvRecordsArray);
-                let csvRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
-                console.log(csvRecords);
+                this.filePathRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
+                console.log(this.filePathRecords);
             }
             reader.onerror = () => {
                 this.notificationService.showError("Error while uploading the data");
@@ -179,10 +184,10 @@ export class RequestComponent implements OnInit {
                     return false;
                 }
             }
-            else if (this.requestModel.tknztnEnabled == 'Y' && this.tokenizationFileList.length < 1) {
-                this.notificationService.showError('Please select Tokenization File Path');
-                return false;
-            }
+            // else if (this.requestModel.tknztnEnabled == 'Y' && this.tokenizationFileList.length < 1) {
+            //     this.notificationService.showError('Please select Tokenization File Path');
+            //     return false;
+            // }
             return true;
         }
         else {
@@ -200,6 +205,9 @@ export class RequestComponent implements OnInit {
 
         this.filePathList = [];
         this.tokenizationFileList = [];
+
+        this.filePathRecords = [];
+        this.tokenizationFilePathRecords = [];
 
         if (fileUploadRef) {
             fileUploadRef.clear();
@@ -240,20 +248,34 @@ export class RequestComponent implements OnInit {
                 default:
                     break;
             }
-            this.appService.getRequestPreviewData(this.requestModel).subscribe(
-                (res: any) => {
-                    if (res.length > 0) {
-                        this.appService.requestModel = this.requestModel;
-                        this.appService.requestPreviewList = res;
-                        this.router.navigate(['/app/request/preview']);
-                    }
-                    else {
-                        this.notificationService.showError("No data found for the selected database");
-                    }
-                },
-                (error) => {
-                    this.notificationService.showError(error || "Error while saving request info");
-                });
+
+            if (this.requestModel.migrationType == MIGRATION_TYPE.FULL_DATABASE) {
+                this.appService.getRequestPreviewData(this.requestModel).subscribe(
+                    (res: any) => {
+                        if (res.length > 0) {
+                            this.appService.requestModel = this.requestModel;
+                            this.appService.requestPreviewList = res;
+                            this.router.navigate(['/app/request/preview']);
+                        }
+                        else {
+                            this.notificationService.showError("No data found for the selected database");
+                        }
+                    },
+                    (error) => {
+                        this.notificationService.showError(error || "Error while saving request info");
+                    });
+            }
+            else if (this.requestModel.migrationType == MIGRATION_TYPE.LIST_OF_TABLE_FROM_FILE) {
+                if (this.filePathRecords.length > 0) {
+                    this.appService.requestModel = this.requestModel;
+                    this.appService.requestPreviewList = this.filePathRecords;
+                    this.router.navigate(['/app/request/preview']);
+                }
+                else {
+                    this.notificationService.showError("No data found for the selected file path");
+                }
+            }
+
         }
     }
 }

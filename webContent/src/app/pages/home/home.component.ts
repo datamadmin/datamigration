@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from 'src/app/core/services/app.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -24,12 +24,16 @@ export class HomeComponent implements OnInit {
   reconStatusChartConfig: any;
 
   constructor(
+    private ngZone: NgZone,
     private router: Router,
     private appService: AppService,
     private notificationService: NotificationService
   ) { }
 
   ngOnInit() {
+
+    let self = this;
+
     this.requestStatusChartConfig = {
       type: 'pie',
       title: {
@@ -48,7 +52,7 @@ export class HomeComponent implements OnInit {
         }
       },
       height: 250,
-      piechartcolor: ['#4fc6e1', '#f7b84b', '#1abc9c', "#f1556c"],
+      piechartcolor: ['#f7b84b', '#4fc6e1', '#1abc9c', "#f1556c"],
       dataLabels: {
         enabled: false
       },
@@ -71,10 +75,10 @@ export class HomeComponent implements OnInit {
       },
       events: {
         dataPointSelection: (event, chartContext, config) => {
-          this.contentClicked('request', event, chartContext, config);
+          self.contentClicked('request', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Submitted", "Failed"]
+      labels: ["In Progress", "Submitted", "Successful", "Failed"]
     };
 
     this.reconStatusChartConfig = {
@@ -95,7 +99,7 @@ export class HomeComponent implements OnInit {
         }
       },
       height: 250,
-      piechartcolor: ['#4fc6e1', '#f7b84b', '#1abc9c', "#f1556c"],
+      piechartcolor: ['#007bff', '#f7b84b', '#4fc6e1', '#1abc9c', "#f1556c"],
       dataLabels: {
         enabled: false
       },
@@ -118,10 +122,10 @@ export class HomeComponent implements OnInit {
       },
       events: {
         dataPointSelection: (event, chartContext, config) => {
-          this.contentClicked('recon', event, chartContext, config);
+          self.contentClicked('recon', event, chartContext, config);
         }
       },
-      labels: ["Not Started", "In Progress", "Submitted", "Failed"]
+      labels: ["Not Started", "In Progress", "Submitted", "Successful", "Failed"]
     };
 
     this.fetchChartData();
@@ -138,12 +142,16 @@ export class HomeComponent implements OnInit {
   contentClicked(requestType, event, chartContext, config) {
     console.log(config);
     if (requestType == 'request') {
-      let status = this.chartData[0]["requestStatus"]["labels"][config.dataPointIndex]
-      this.router.navigate(['/app/recon'], { queryParams: { status: status } });
+      let status = this.chartData[0]["requestStatus"]["labels"][config.dataPointIndex];
+      this.ngZone.run(() => {
+        this.router.navigate(['/app/recon'], { queryParams: { status: status } });
+      });
     }
     else if (requestType == 'recon') {
-      let status = this.chartData[0]["reconStatus"]["labels"][config.dataPointIndex]
-      this.router.navigate(['/app/history'], { queryParams: { status: status } });
+      let status = this.chartData[0]["reconStatus"]["labels"][config.dataPointIndex];
+      this.ngZone.run(() => {
+        this.router.navigate(['/app/history'], { queryParams: { status: status } });
+      });
     }
   }
 
@@ -154,14 +162,20 @@ export class HomeComponent implements OnInit {
     this.appService.getHomeScreenData().subscribe(
       (res) => {
         this.chartData = [];
-        let propList = ["Not Started", "In Progress", "Submitted", "Failed"];
+        let requestPropList = ["In Progress", "Submitted", "Successful", "Failed"];
+        let reconPropList = ["Not Started", "In Progress", "Submitted", "Successful", "Failed"];
+
         let requestStatus = [];
         let reconStatus = [];
 
-        propList.forEach((prop) => {
+        requestPropList.forEach((prop) => {
           requestStatus.push(Math.round(res["reconMainCount"].hasOwnProperty(prop) ? (res["reconMainCount"][prop] / res["reconMainTotalCount"]) * 100 : 0));
+        });
+
+        reconPropList.forEach((prop) => {
           reconStatus.push(Math.round(res["reconHistoryMainCount"].hasOwnProperty(prop) ? (res["reconHistoryMainCount"][prop] / res["reconHistoryMainTotalCount"]) * 100 : 0));
         });
+
         this.chartData.push({
           "requestStatus": Object.assign({}, this.requestStatusChartConfig, { "series": requestStatus }),
           "reconStatus": Object.assign({}, this.reconStatusChartConfig, { "series": reconStatus })

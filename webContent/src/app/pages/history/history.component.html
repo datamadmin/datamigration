@@ -36,11 +36,13 @@
                                             </span>
                                             <span *ngSwitchCase="'status'">
                                                 <span *ngIf="rowData.status=='Not Started'"
-                                                    class="badge badge-secondary">Not Started</span>
-                                                <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In
-                                                    Progress</span>
+                                                    class="badge badge-primary">Not Started</span>
+                                                <span *ngIf="rowData.status=='In Progress'"
+                                                    class="badge badge-warning">In Progress</span>
                                                 <span *ngIf="rowData.status=='Submitted'"
-                                                    class="badge badge-success">Submitted</span>
+                                                    class="badge badge-info">Submitted</span>
+                                                <span *ngIf="rowData.status=='Successful'"
+                                                    class="badge badge-success">Successful</span>
                                                 <span *ngIf="rowData.status=='Failed'"
                                                     class="badge badge-danger">Failed</span>
                                             </span>
@@ -88,11 +90,13 @@
                                         <td *ngFor="let col of columns" [ngSwitch]="col.field">
                                             <span *ngSwitchCase="'status'">
                                                 <span *ngIf="rowData.status=='Not Started'"
-                                                    class="badge badge-secondary">Not Started</span>
-                                                <span *ngIf="rowData.status=='In Progress'" class="badge badge-info">In
-                                                    Progress</span>
+                                                    class="badge badge-primary">Not Started</span>
+                                                <span *ngIf="rowData.status=='In Progress'"
+                                                    class="badge badge-warning">In Progress</span>
                                                 <span *ngIf="rowData.status=='Submitted'"
-                                                    class="badge badge-success">Submitted</span>
+                                                    class="badge badge-info">Submitted</span>
+                                                <span *ngIf="rowData.status=='Successful'"
+                                                    class="badge badge-success">Successful</span>
                                                 <span *ngIf="rowData.status=='Failed'"
                                                     class="badge badge-danger">Failed</span>
                                             </span>
