@@ -109,26 +109,24 @@ public class DMUHelperService {
 					tgtFormatPropEntity.setOrcFormatFlag(Constants.YES);
 				} else if (StringUtils.equalsIgnoreCase(Constants.PARQUET, tgtFormatPropObj.getFormatType())) {
 					tgtFormatPropEntity.setParquetFormatFlag(Constants.YES);
-				}  else if (StringUtils.equalsIgnoreCase(Constants.AVRO, tgtFormatPropObj.getFormatType())) {
+				} else if (StringUtils.equalsIgnoreCase(Constants.AVRO, tgtFormatPropObj.getFormatType())) {
 					tgtFormatPropEntity.setAvroFormatFlag(Constants.YES);
 				} else if (StringUtils.equalsIgnoreCase(Constants.SRC_COMPRESSION, tgtFormatPropObj.getFormatType())) {
 					tgtFormatPropEntity.setSrcCmprsnFlag(Constants.YES);
 				}
 
-				if(tgtFormatPropObj.getCompressionType()!=null && tgtFormatPropObj.getCompressionType().equalsIgnoreCase(Constants.SRC_COMPRESSION))
-				{
+				if (tgtFormatPropObj.getCompressionType() != null
+						&& tgtFormatPropObj.getCompressionType().equalsIgnoreCase(Constants.SRC_COMPRESSION)) {
 					tgtFormatPropEntity.setSrcCmprsnFlag(Constants.YES);
-				}
-				else if (StringUtils.equalsIgnoreCase(Constants.UN_COMPRESSED, tgtFormatPropObj.getCompressionType())) {
+				} else if (StringUtils.equalsIgnoreCase(Constants.UN_COMPRESSED,
+						tgtFormatPropObj.getCompressionType())) {
 					tgtFormatPropEntity.setUncmprsnFlag(Constants.YES);
 				} else if (StringUtils.equalsIgnoreCase(Constants.GZIP, tgtFormatPropObj.getCompressionType())) {
 					tgtFormatPropEntity.setGzipCmprsnFlag(Constants.YES);
-				}
-				else
-				{
+				} else {
 					tgtFormatPropEntity.setSrcCmprsnFlag(Constants.NO);
 				}
-				System.out.println("**Compressiontype***"+tgtFormatPropObj.getCompressionType());
+				System.out.println("**Compressiontype***" + tgtFormatPropObj.getCompressionType());
 				tgtFormatPropRepository.save(tgtFormatPropEntity);
 			}
 		}
@@ -200,6 +198,22 @@ public class DMUHelperService {
 				dmuS3Entity.setCredentialStrgType(Constants.DIRECT_SC);
 				dmuS3Entity.setAwsAccessIdSc(connectionDto.getAwsAccessIdSc());
 				dmuS3Entity.setAwsSecretKeySc(connectionDto.getAwsSecretKeySc());
+				dmuS3Entity.setRoleArn(connectionDto.getRoleArn());
+				dmuS3Entity.setPrincipalArn(connectionDto.getPrincipalArn());
+				dmuS3Entity.setSamlProviderArn(connectionDto.getSamlProviderArn());
+				dmuS3Entity.setRoleSesnName(connectionDto.getRoleSesnName());
+				dmuS3Entity.setPolicyArnMembers(connectionDto.getPolicyArnMembers());
+				dmuS3Entity.setExternalId(connectionDto.getExternalId());
+				dmuS3Entity.setFdrtdUserName(connectionDto.getFdrtdUserName());
+				dmuS3Entity.setInlineSesnPolicy(connectionDto.getInlineSesnPolicy());
+				dmuS3Entity.setDuration(connectionDto.getDuration().longValue());
+				dmuS3Entity.setLdapUserName(connectionDto.getLdapUserName());
+				dmuS3Entity.setLdapUserPassw(connectionDto.getLdapUserPassw());
+				dmuS3Entity.setLdapDomain(connectionDto.getLdapDomain());
+				//dmuS3Entity.setRoleArn(connectionDto.getRoleArn());
+
+
+
 				if (StringUtils.equalsIgnoreCase(connectionDto.getScCrdntlAccessType(), Constants.ASSUME)) {
 					dmuS3Entity.setScCrdntlAccessType(Constants.ASSUME);
 				} else if (StringUtils.equalsIgnoreCase(connectionDto.getScCrdntlAccessType(), Constants.ASSUME_SAML)) {
@@ -248,6 +262,7 @@ public class DMUHelperService {
 			connectionDto.setImpalaHostName(dmuHdfsObj.getImpalaHostName());
 
 			connectionDto.setSqlWhDir(dmuHdfsObj.getSqlWhDir());
+			connectionDto.setHiveMsUri(dmuHdfsObj.getHiveMsUri());
 			connectionDto.setImpalaCnctnFlag(dmuHdfsObj.getImpalaCnctnFlag());
 			connectionDto.setSparkCnctnFlag(dmuHdfsObj.getSparkCnctnFlag());
 		}
@@ -265,7 +280,7 @@ public class DMUHelperService {
 			connectionDto.setAwsAccessIdSc(dmuS3Obj.getAwsAccessIdSc());
 			connectionDto.setScCrdntlAccessType(dmuS3Obj.getScCrdntlAccessType());
 			connectionDto.setAwsSecretKeySc(dmuS3Obj.getAwsSecretKeySc());
-			connectionDto.setAwsAccessIdSc(dmuS3Obj.getAwsAccessIdLc());
+			//connectionDto.setAwsAccessIdSc(dmuS3Obj.getAwsAccessIdLc());
 			connectionDto.setRoleArn(dmuS3Obj.getRoleArn());
 			connectionDto.setPrincipalArn(dmuS3Obj.getPrincipalArn());
 			connectionDto.setSamlProviderArn(dmuS3Obj.getSamlProviderArn());
@@ -275,7 +290,9 @@ public class DMUHelperService {
 			connectionDto.setDuration(dmuS3Obj.getDuration() != null ? Math.toIntExact(dmuS3Obj.getDuration()) : 0);
 			connectionDto.setLdapUserName(dmuS3Obj.getLdapUserName());
 			connectionDto.setLdapUserPassw(dmuS3Obj.getLdapUserPassw());
+			connectionDto.setLdapDomain(dmuS3Obj.getLdapDomain());
 			connectionDto.setScCrdntlAccessType(dmuS3Obj.getScCrdntlAccessType());
+			connectionDto.setInlineSesnPolicy(dmuS3Obj.getInlineSesnPolicy());
 		}
 	}
 
@@ -298,31 +315,38 @@ public class DMUHelperService {
 		if (tgtFormatProp.isPresent()) {
 			TGTFormatProp tgtFormatPropObj = tgtFormatProp.get();
 			TGTFormatPropTempDto tgtFormatPropTempDto = TGTFormatPropTempDto.builder().build();
-			if (StringUtils.isNotBlank(tgtFormatPropObj.getSrcFormatFlag())) {
+			if (StringUtils.isNotBlank(tgtFormatPropObj.getSrcFormatFlag()) && tgtFormatPropObj.getSrcFormatFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setFormatType(Constants.SOURCE);
-			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getTextFormatFlag())) {
+			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getTextFormatFlag())&& tgtFormatPropObj.getTextFormatFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setFormatType(Constants.TEXT);
-			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getSqncFormatFlag())) {
+			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getSqncFormatFlag())&& tgtFormatPropObj.getSqncFormatFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setFormatType(Constants.SEQUENCE);
-			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getRcFormatFlag())) {
+			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getRcFormatFlag())&& tgtFormatPropObj.getRcFormatFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setFormatType(Constants.RECORD_COLUMNAR);
-			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getOrcFormatFlag())) {
+			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getOrcFormatFlag())&& tgtFormatPropObj.getOrcFormatFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setFormatType(Constants.ORC);
-			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getParquetFormatFlag())) {
+			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getParquetFormatFlag())&& tgtFormatPropObj.getParquetFormatFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setFormatType(Constants.PARQUET);
 			}
+			else if (StringUtils.isNotBlank(tgtFormatPropObj.getAvroFormatFlag())&& tgtFormatPropObj.getAvroFormatFlag().equalsIgnoreCase(Constants.YES)) {
+				tgtFormatPropTempDto.setFormatType(Constants.AVRO);
+			}
+
 
 
 
 			if (StringUtils.isNotBlank(tgtFormatPropObj.getFieldDelimiter())) {
 				tgtFormatPropTempDto.setFieldDelimiter(tgtFormatPropObj.getFieldDelimiter());
-			}  
+			}
 
-			if (StringUtils.isNotBlank(tgtFormatPropObj.getUncmprsnFlag())&&tgtFormatPropObj.getUncmprsnFlag().equalsIgnoreCase(Constants.YES)) {
+			if (StringUtils.isNotBlank(tgtFormatPropObj.getUncmprsnFlag())
+					&& tgtFormatPropObj.getUncmprsnFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setCompressionType(Constants.UN_COMPRESSED);
-			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getGzipCmprsnFlag())&&tgtFormatPropObj.getGzipCmprsnFlag().equalsIgnoreCase(Constants.YES)) {
+			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getGzipCmprsnFlag())
+					&& tgtFormatPropObj.getGzipCmprsnFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setCompressionType(Constants.GZIP);
-			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getSrcCmprsnFlag())&&tgtFormatPropObj.getSrcCmprsnFlag().equalsIgnoreCase(Constants.YES)) {
+			} else if (StringUtils.isNotBlank(tgtFormatPropObj.getSrcCmprsnFlag())
+					&& tgtFormatPropObj.getSrcCmprsnFlag().equalsIgnoreCase(Constants.YES)) {
 				tgtFormatPropTempDto.setCompressionType(Constants.SRC_COMPRESSION);
 			}
 
